@@ -7,9 +7,10 @@ interface TaskCardProps {
   task: Task;
   onDelete?: () => void;
   onView?: () => void;
+  onEdit?: () => void;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ task, onDelete, onView }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, onDelete, onView, onEdit }) => {
   const navigate = useNavigate();
 
   const handleDelete = async () => {
@@ -54,7 +55,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onDelete, onView }) => {
         <button onClick={onView ? onView : () => navigate(`/tasks/${task.id}`)} style={buttonStyle}>
           View
         </button>
-        <button onClick={() => navigate(`/edit/${task.id}`)} style={{ ...buttonStyle, background: '#f1c40f', color: '#222' }}>
+        <button onClick={onEdit ? onEdit : () => navigate(`/edit/${task.id}`)} style={{ ...buttonStyle, background: '#f1c40f', color: '#222' }}>
           Edit
         </button>
         <button onClick={handleDelete} style={{ ...buttonStyle, background: '#e74c3c', color: 'white' }}>

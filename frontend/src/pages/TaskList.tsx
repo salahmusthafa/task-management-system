@@ -4,6 +4,7 @@ import { getTasks } from '../services/api';
 import type { Task, TaskStatus } from '../types/task';
 import TaskCard from '../components/TaskCard';
 import TaskDetailModal from './TaskDetail';
+import TaskFormModal from './TaskForm';
 import ReactDOM from 'react-dom';
 
 const statusOptions: TaskStatus[] = ['To Do', 'In Progress', 'Done'];
@@ -14,6 +15,8 @@ const TaskList: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const navigate = useNavigate();
 
   const fetchTasks = () => {
@@ -38,6 +41,7 @@ const TaskList: React.FC = () => {
     : tasks.filter((task) => task.status === statusFilter);
 
   // The content to blur (top bar + grid)
+  const blurred = selectedTask || editingTask || showCreateModal;
   const blurredContent = (
     <>
       <div style={{
@@ -48,7 +52,7 @@ const TaskList: React.FC = () => {
         gap: 16,
         marginBottom: 32,
         width: '100%',
-        filter: selectedTask ? 'blur(4px)' : 'none',
+        filter: blurred ? 'blur(4px)' : 'none',
         transition: 'filter 0.2s',
       }}>
         <h1 style={{ margin: 0, color: '#222', flex: '1 1 200px' }}>Task List</h1>
@@ -66,7 +70,7 @@ const TaskList: React.FC = () => {
           </select>
         </div>
         <button
-          onClick={() => navigate('/create')}
+          onClick={() => setShowCreateModal(true)}
           style={{ background: '#3498db', color: 'white', border: 'none', borderRadius: 4, padding: '0.5rem 1rem', fontSize: 16, cursor: 'pointer', whiteSpace: 'nowrap' }}
         >
           + Create Task
@@ -78,7 +82,7 @@ const TaskList: React.FC = () => {
         gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
         width: '100%',
         paddingBottom: 10,
-        filter: selectedTask ? 'blur(4px)' : 'none',
+        filter: blurred ? 'blur(4px)' : 'none',
         transition: 'filter 0.2s',
       }}>
         {filteredTasks.length === 0 && !loading && <div>No tasks found.</div>}
@@ -88,6 +92,7 @@ const TaskList: React.FC = () => {
             task={task}
             onDelete={fetchTasks}
             onView={() => setSelectedTask(task)}
+            onEdit={() => setEditingTask(task)}
           />
         ))}
       </div>
@@ -104,6 +109,12 @@ const TaskList: React.FC = () => {
       {blurredContent}
       {selectedTask && ReactDOM.createPortal(
         <TaskDetailModal task={selectedTask} onClose={() => setSelectedTask(null)} />, document.body
+      )}
+      {editingTask && ReactDOM.createPortal(
+        <TaskFormModal task={editingTask} onClose={() => setEditingTask(null)} onSaved={fetchTasks} />, document.body
+      )}
+      {showCreateModal && ReactDOM.createPortal(
+        <TaskFormModal onClose={() => setShowCreateModal(false)} onSaved={fetchTasks} />, document.body
       )}
     </div>
   );
