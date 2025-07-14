@@ -1,5 +1,7 @@
 using Microsoft.Data.SqlClient;
 using Dapper;
+using backend.Data;
+using backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,13 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Register dependencies
+builder.Services.AddSingleton<DapperContext>();
+builder.Services.AddScoped<TaskRepository>();
+builder.Services.AddScoped<TaskService>();
+
+builder.Services.AddControllers();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -28,57 +37,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors();
-
-string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
-
-app.MapGet("/api/tasks", async (int? page, int? pageSize, string? status) =>
-{
-    using var connection = new SqlConnection(connectionString);
-    int p = page ?? 1;
-    int ps = pageSize ?? 10;
-    int offset = (p - 1) * ps;
-    string whereClause = string.IsNullOrEmpty(status) ? "" : "WHERE Status = @Status";
-    var tasks = await connection.QueryAsync<Task>(
-        $"SELECT * FROM Tasks {whereClause} ORDER BY Id DESC OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY",
-        new { Offset = offset, PageSize = ps, Status = status });
-    var total = await connection.ExecuteScalarAsync<int>(
-        string.IsNullOrEmpty(status)
-            ? "SELECT COUNT(*) FROM Tasks"
-            : "SELECT COUNT(*) FROM Tasks WHERE Status = @Status",
-        new { Status = status });
-    return Results.Ok(new { tasks, total });
-});
-
-app.MapGet("/api/tasks/{id}", async (int id) =>
-{
-    using var connection = new SqlConnection(connectionString);
-    var task = await connection.QuerySingleOrDefaultAsync<Task>("SELECT * FROM Tasks WHERE Id = @Id", new { Id = id });
-    return task is not null ? Results.Ok(task) : Results.NotFound();
-});
-
-app.MapPost("/api/tasks", async (Task task) =>
-{
-    using var connection = new SqlConnection(connectionString);
-    var sql = "INSERT INTO Tasks (Title, Description, Status, DueDate) VALUES (@Title, @Description, @Status, @DueDate); SELECT CAST(SCOPE_IDENTITY() as int);";
-    var id = await connection.ExecuteScalarAsync<int>(sql, task);
-    task.Id = id;
-    return Results.Created($"/api/tasks/{id}", task);
-});
-
-app.MapPut("/api/tasks/{id}", async (int id, Task task) =>
-{
-    using var connection = new SqlConnection(connectionString);
-    var sql = "UPDATE Tasks SET Title = @Title, Description = @Description, Status = @Status, DueDate = @DueDate WHERE Id = @Id";
-    var affected = await connection.ExecuteAsync(sql, new { task.Title, task.Description, task.Status, task.DueDate, Id = id });
-    return affected > 0 ? Results.NoContent() : Results.NotFound();
-});
-
-app.MapDelete("/api/tasks/{id}", async (int id) =>
-{
-    using var connection = new SqlConnection(connectionString);
-    var sql = "DELETE FROM Tasks WHERE Id = @Id";
-    var affected = await connection.ExecuteAsync(sql, new { Id = id });
-    return affected > 0 ? Results.NoContent() : Results.NotFound();
-});
+app.MapControllers();
 
 app.Run();
