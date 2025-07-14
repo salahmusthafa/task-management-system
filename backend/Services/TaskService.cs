@@ -4,20 +4,20 @@ using backend.Models;
 
 namespace backend.Services
 {
-    public class TaskService : ITaskService
+    public class TaskCardService : ITaskCardService
     {
-        private readonly ITaskRepository _repository;
+        private readonly ITaskCardRepository _repository;
 
-        public TaskService(ITaskRepository repository)
+        public TaskCardService(ITaskCardRepository repository)
         {
             _repository = repository;
         }
 
-        public async Task<(IEnumerable<TaskDto> tasks, int total)> GetTasksAsync(int page, int pageSize, string? status)
+        public async System.Threading.Tasks.Task<(IEnumerable<TaskCardDto> tasks, int total)> GetTasksAsync(int page, int pageSize, string? status)
         {
             var tasks = await _repository.GetTasksAsync(page, pageSize, status);
             var total = await _repository.GetTasksCountAsync(status);
-            var taskDtos = tasks.Select(t => new TaskDto
+            var taskDtos = tasks.Select(t => new TaskCardDto
             {
                 Id = t.Id,
                 Title = t.Title,
@@ -25,14 +25,14 @@ namespace backend.Services
                 Status = t.Status,
                 DueDate = t.DueDate
             });
-            return (taskDtos, total);
+            return (tasks: taskDtos, total: total);
         }
 
-        public async Task<TaskDto?> GetTaskByIdAsync(int id)
+        public async System.Threading.Tasks.Task<TaskCardDto?> GetTaskByIdAsync(int id)
         {
             var task = await _repository.GetTaskByIdAsync(id);
             if (task == null) return null;
-            return new TaskDto
+            return new TaskCardDto
             {
                 Id = task.Id,
                 Title = task.Title,
@@ -42,9 +42,9 @@ namespace backend.Services
             };
         }
 
-        public async Task<TaskDto> CreateTaskAsync(CreateTaskDto dto)
+        public async System.Threading.Tasks.Task<TaskCardDto> CreateTaskAsync(CreateTaskCardDto dto)
         {
-            var task = new Task
+            var task = new TaskCard
             {
                 Title = dto.Title,
                 Description = dto.Description,
@@ -53,7 +53,7 @@ namespace backend.Services
             };
             var id = await _repository.CreateTaskAsync(task);
             task.Id = id;
-            return new TaskDto
+            return new TaskCardDto
             {
                 Id = task.Id,
                 Title = task.Title,
@@ -63,9 +63,9 @@ namespace backend.Services
             };
         }
 
-        public async Task<bool> UpdateTaskAsync(int id, UpdateTaskDto dto)
+        public async System.Threading.Tasks.Task<bool> UpdateTaskAsync(int id, UpdateTaskCardDto dto)
         {
-            var task = new Task
+            var task = new TaskCard
             {
                 Title = dto.Title,
                 Description = dto.Description,
@@ -75,7 +75,7 @@ namespace backend.Services
             return await _repository.UpdateTaskAsync(id, task);
         }
 
-        public async Task<bool> DeleteTaskAsync(int id)
+        public async System.Threading.Tasks.Task<bool> DeleteTaskAsync(int id)
         {
             return await _repository.DeleteTaskAsync(id);
         }

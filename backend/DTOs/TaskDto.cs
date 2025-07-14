@@ -1,6 +1,6 @@
 namespace backend.DTOs
 {
-    public class TaskDto
+    public class TaskCardDto
     {
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;

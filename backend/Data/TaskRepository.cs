@@ -3,16 +3,16 @@ using Dapper;
 
 namespace backend.Data
 {
-    public class TaskRepository : ITaskRepository
+    public class TaskCardRepository : ITaskCardRepository
     {
         private readonly DapperContext _context;
 
-        public TaskRepository(DapperContext context)
+        public TaskCardRepository(DapperContext context)
         {
             _context = context;
         }
 
-        public async Task<IEnumerable<Task>> GetTasksAsync(int page, int pageSize, string? status)
+        public async System.Threading.Tasks.Task<IEnumerable<TaskCard>> GetTasksAsync(int page, int pageSize, string? status)
         {
             using var connection = _context.CreateConnection();
             string whereClause = string.IsNullOrEmpty(status) ? "" : "WHERE Status = @Status";
@@ -20,10 +20,10 @@ namespace backend.Data
                 SELECT * FROM Tasks {whereClause}
                 ORDER BY Id DESC
                 OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
-            return await connection.QueryAsync<Task>(sql, new { Offset = (page - 1) * pageSize, PageSize = pageSize, Status = status });
+            return await connection.QueryAsync<TaskCard>(sql, new { Offset = (page - 1) * pageSize, PageSize = pageSize, Status = status });
         }
 
-        public async Task<int> GetTasksCountAsync(string? status)
+        public async System.Threading.Tasks.Task<int> GetTasksCountAsync(string? status)
         {
             using var connection = _context.CreateConnection();
             string sql = string.IsNullOrEmpty(status)
@@ -32,13 +32,13 @@ namespace backend.Data
             return await connection.ExecuteScalarAsync<int>(sql, new { Status = status });
         }
 
-        public async Task<Task?> GetTaskByIdAsync(int id)
+        public async System.Threading.Tasks.Task<TaskCard?> GetTaskByIdAsync(int id)
         {
             using var connection = _context.CreateConnection();
-            return await connection.QuerySingleOrDefaultAsync<Task>("SELECT * FROM Tasks WHERE Id = @Id", new { Id = id });
+            return await connection.QuerySingleOrDefaultAsync<TaskCard>("SELECT * FROM Tasks WHERE Id = @Id", new { Id = id });
         }
 
-        public async Task<int> CreateTaskAsync(Task task)
+        public async System.Threading.Tasks.Task<int> CreateTaskAsync(TaskCard task)
         {
             using var connection = _context.CreateConnection();
             var sql = @"INSERT INTO Tasks (Title, Description, Status, DueDate)
@@ -47,7 +47,7 @@ namespace backend.Data
             return await connection.ExecuteScalarAsync<int>(sql, task);
         }
 
-        public async Task<bool> UpdateTaskAsync(int id, Task task)
+        public async System.Threading.Tasks.Task<bool> UpdateTaskAsync(int id, TaskCard task)
         {
             using var connection = _context.CreateConnection();
             var sql = @"UPDATE Tasks SET Title = @Title, Description = @Description, Status = @Status, DueDate = @DueDate WHERE Id = @Id";
@@ -55,7 +55,7 @@ namespace backend.Data
             return affected > 0;
         }
 
-        public async Task<bool> DeleteTaskAsync(int id)
+        public async System.Threading.Tasks.Task<bool> DeleteTaskAsync(int id)
         {
             using var connection = _context.CreateConnection();
             var sql = "DELETE FROM Tasks WHERE Id = @Id";

@@ -2,13 +2,13 @@ using backend.Models;
 
 namespace backend.Data
 {
-    public interface ITaskRepository
+    public interface ITaskCardRepository
     {
-        Task<IEnumerable<Task>> GetTasksAsync(int page, int pageSize, string? status);
-        Task<int> GetTasksCountAsync(string? status);
-        Task<Task?> GetTaskByIdAsync(int id);
-        Task<int> CreateTaskAsync(Task task);
-        Task<bool> UpdateTaskAsync(int id, Task task);
-        Task<bool> DeleteTaskAsync(int id);
+        System.Threading.Tasks.Task<IEnumerable<TaskCard>> GetTasksAsync(int page, int pageSize, string? status);
+        System.Threading.Tasks.Task<int> GetTasksCountAsync(string? status);
+        System.Threading.Tasks.Task<TaskCard?> GetTaskByIdAsync(int id);
+        System.Threading.Tasks.Task<int> CreateTaskAsync(TaskCard task);
+        System.Threading.Tasks.Task<bool> UpdateTaskAsync(int id, TaskCard task);
+        System.Threading.Tasks.Task<bool> DeleteTaskAsync(int id);
     }
 } 

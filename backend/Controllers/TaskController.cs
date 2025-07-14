@@ -6,17 +6,17 @@ namespace backend.Controllers
 {
     [ApiController]
     [Route("api/tasks")]
-    public class TaskController : ControllerBase
+    public class TaskCardController : ControllerBase
     {
-        private readonly ITaskService _service;
+        private readonly ITaskCardService _service;
 
-        public TaskController(ITaskService service)
+        public TaskCardController(ITaskCardService service)
         {
             _service = service;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTasks([FromQuery] int? page, [FromQuery] int? pageSize, [FromQuery] string? status)
+        public async System.Threading.Tasks.Task<IActionResult> GetTasks([FromQuery] int? page, [FromQuery] int? pageSize, [FromQuery] string? status)
         {
             int p = page ?? 1;
             int ps = pageSize ?? 10;
@@ -25,7 +25,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetTask(int id)
+        public async System.Threading.Tasks.Task<IActionResult> GetTask(int id)
         {
             var task = await _service.GetTaskByIdAsync(id);
             if (task == null) return NotFound();
@@ -33,14 +33,14 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateTask([FromBody] CreateTaskDto dto)
+        public async System.Threading.Tasks.Task<IActionResult> CreateTask([FromBody] CreateTaskCardDto dto)
         {
             var task = await _service.CreateTaskAsync(dto);
             return CreatedAtAction(nameof(GetTask), new { id = task.Id }, task);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTask(int id, [FromBody] UpdateTaskDto dto)
+        public async System.Threading.Tasks.Task<IActionResult> UpdateTask(int id, [FromBody] UpdateTaskCardDto dto)
         {
             var updated = await _service.UpdateTaskAsync(id, dto);
             if (!updated) return NotFound();
@@ -48,7 +48,7 @@ namespace backend.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTask(int id)
+        public async System.Threading.Tasks.Task<IActionResult> DeleteTask(int id)
         {
             var deleted = await _service.DeleteTaskAsync(id);
             if (!deleted) return NotFound();

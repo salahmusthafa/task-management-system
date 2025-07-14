@@ -1,6 +1,6 @@
 namespace backend.Models
 {
-    public class Task
+    public class TaskCard
     {
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;

@@ -1,6 +1,6 @@
 namespace backend.DTOs
 {
-    public class UpdateTaskDto
+    public class UpdateTaskCardDto
     {
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;

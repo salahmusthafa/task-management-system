@@ -22,8 +22,8 @@ builder.Services.AddCors(options =>
 
 // Register dependencies
 builder.Services.AddSingleton<DapperContext>();
-builder.Services.AddScoped<ITaskRepository, TaskRepository>();
-builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<ITaskCardRepository, TaskCardRepository>();
+builder.Services.AddScoped<ITaskCardService, TaskCardService>();
 
 builder.Services.AddControllers();
 
