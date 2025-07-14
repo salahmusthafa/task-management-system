@@ -14,9 +14,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onDelete, onView, onEdit }) =
   const navigate = useNavigate();
 
   const handleDelete = async () => {
-    if (window.confirm('Are you sure you want to delete this task?')) {
+    if (onDelete) {
+      onDelete();
+    } else {
       await deleteTask(task.id);
-      if (onDelete) onDelete();
     }
   };
 

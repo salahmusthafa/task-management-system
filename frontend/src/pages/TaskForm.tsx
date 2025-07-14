@@ -57,32 +57,38 @@ const TaskFormModal: React.FC<TaskFormModalProps> = ({ task, onClose, onSaved })
   };
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      background: 'rgba(0,0,0,0.25)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 2000,
-    }}>
-      <div style={{
-        background: 'white',
-        borderRadius: 12,
-        boxShadow: '0 4px 24px rgba(0,0,0,0.13)',
-        padding: 32,
-        minWidth: 320,
-        maxWidth: 420,
-        width: '90vw',
-        color: '#222',
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        background: 'rgba(0,0,0,0.25)',
         display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        position: 'relative',
-      }}>
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 2000,
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          background: 'white',
+          borderRadius: 12,
+          boxShadow: '0 4px 24px rgba(0,0,0,0.13)',
+          padding: 32,
+          minWidth: 320,
+          maxWidth: 420,
+          width: '90vw',
+          color: '#222',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          position: 'relative',
+        }}
+        onClick={e => e.stopPropagation()}
+      >
         <button
           onClick={onClose}
           style={{
