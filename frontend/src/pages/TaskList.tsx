@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { getTasks } from '../services/api';
 import type { Task, TaskStatus } from '../types/task';
 import TaskCard from '../components/TaskCard';
+import TaskDetailModal from './TaskDetail';
+import ReactDOM from 'react-dom';
 
 const statusOptions: TaskStatus[] = ['To Do', 'In Progress', 'Done'];
 
@@ -11,6 +13,7 @@ const TaskList: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<TaskStatus | 'All'>('All');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const navigate = useNavigate();
 
   const fetchTasks = () => {
@@ -34,12 +37,9 @@ const TaskList: React.FC = () => {
     ? tasks
     : tasks.filter((task) => task.status === statusFilter);
 
-  return (
-    <div style={{
-      maxWidth: 1400,
-      margin: '0 auto',
-      width: '100%',
-    }}>
+  // The content to blur (top bar + grid)
+  const blurredContent = (
+    <>
       <div style={{
         display: 'flex',
         flexWrap: 'wrap',
@@ -48,6 +48,8 @@ const TaskList: React.FC = () => {
         gap: 16,
         marginBottom: 32,
         width: '100%',
+        filter: selectedTask ? 'blur(4px)' : 'none',
+        transition: 'filter 0.2s',
       }}>
         <h1 style={{ margin: 0, color: '#222', flex: '1 1 200px' }}>Task List</h1>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -76,12 +78,33 @@ const TaskList: React.FC = () => {
         gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
         width: '100%',
         paddingBottom: 10,
+        filter: selectedTask ? 'blur(4px)' : 'none',
+        transition: 'filter 0.2s',
       }}>
         {filteredTasks.length === 0 && !loading && <div>No tasks found.</div>}
         {filteredTasks.map((task) => (
-          <TaskCard key={task.id} task={task} onDelete={fetchTasks} minWidth={320} />
+          <TaskCard
+            key={task.id}
+            task={task}
+            onDelete={fetchTasks}
+            onView={() => setSelectedTask(task)}
+          />
         ))}
       </div>
+    </>
+  );
+
+  return (
+    <div style={{
+      maxWidth: 1400,
+      margin: '0 auto',
+      width: '100%',
+      position: 'relative',
+    }}>
+      {blurredContent}
+      {selectedTask && ReactDOM.createPortal(
+        <TaskDetailModal task={selectedTask} onClose={() => setSelectedTask(null)} />, document.body
+      )}
     </div>
   );
 };

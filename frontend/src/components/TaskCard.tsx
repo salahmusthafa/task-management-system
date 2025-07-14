@@ -6,10 +6,10 @@ import { deleteTask } from '../services/api';
 interface TaskCardProps {
   task: Task;
   onDelete?: () => void;
-  minWidth?: number;
+  onView?: () => void;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ task, onDelete }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, onDelete, onView }) => {
   const navigate = useNavigate();
 
   const handleDelete = async () => {
@@ -51,7 +51,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onDelete }) => {
         <p style={{ margin: '0 0 12px 0', color: '#222' }}><strong>Due:</strong> {new Date(task.dueDate).toLocaleDateString()}</p>
       </div>
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-        <button onClick={() => navigate(`/tasks/${task.id}`)} style={buttonStyle}>
+        <button onClick={onView ? onView : () => navigate(`/tasks/${task.id}`)} style={buttonStyle}>
           View
         </button>
         <button onClick={() => navigate(`/edit/${task.id}`)} style={{ ...buttonStyle, background: '#f1c40f', color: '#222' }}>

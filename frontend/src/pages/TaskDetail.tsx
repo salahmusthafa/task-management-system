@@ -1,48 +1,75 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { getTask } from '../services/api';
+import React from 'react';
 import type { Task } from '../types/task';
 
-const TaskDetail: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const [task, setTask] = useState<Task | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+interface TaskDetailModalProps {
+  task: Task;
+  onClose: () => void;
+}
 
-  useEffect(() => {
-    if (id) {
-      setLoading(true);
-      getTask(Number(id))
-        .then(setTask)
-        .catch(() => setError('Failed to load task'))
-        .finally(() => setLoading(false));
-    }
-  }, [id]);
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div style={{ color: 'red' }}>{error}</div>;
-  if (!task) return <div>Task not found.</div>;
-
+const TaskDetailModal: React.FC<TaskDetailModalProps> = ({ task, onClose }) => {
   return (
     <div style={{
-      maxWidth: 500,
-      margin: '0 auto',
-      background: 'white',
-      borderRadius: 8,
-      boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-      padding: 32,
-      marginTop: 32,
-      color: '#222',
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100vw',
+      height: '100vh',
+      background: 'rgba(0,0,0,0.25)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 2000,
     }}>
-      <h1 style={{ marginBottom: 24, color: '#222' }}>Task Details</h1>
-      <p style={{ marginBottom: 12, color: '#222' }}><strong>Title:</strong> {task.title}</p>
-      <p style={{ marginBottom: 12, color: '#222' }}><strong>Description:</strong> {task.description}</p>
-      <p style={{ marginBottom: 12, color: '#222' }}><strong>Status:</strong> {task.status}</p>
-      <p style={{ marginBottom: 24, color: '#222' }}><strong>Due Date:</strong> {new Date(task.dueDate).toLocaleDateString()}</p>
-      <button onClick={() => navigate(-1)} style={{ background: '#e0e0e0', color: '#222', border: 'none', borderRadius: 4, padding: '0.5rem 1.2rem', fontSize: 16, cursor: 'pointer' }}>Back</button>
+      <div style={{
+        background: 'white',
+        borderRadius: 12,
+        boxShadow: '0 4px 24px rgba(0,0,0,0.13)',
+        padding: 32,
+        minWidth: 320,
+        maxWidth: 420,
+        width: '90vw',
+        color: '#222',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        position: 'relative',
+      }}>
+        <button
+          onClick={onClose}
+          style={{
+            position: 'absolute',
+            top: 12,
+            right: 12,
+            background: 'transparent',
+            border: 'none',
+            fontSize: 22,
+            color: '#888',
+            cursor: 'pointer',
+          }}
+          aria-label="Close"
+        >
+          ×
+        </button>
+        <h2 style={{ marginBottom: 16, fontSize: 24, fontWeight: 700, color: '#222' }}>Task Details</h2>
+        <div style={{ marginBottom: 12 }}>
+          <span style={{ fontWeight: 600, color: '#555', fontSize: 16 }}>Title:</span>
+          <span style={{ marginLeft: 8, fontSize: 17 }}>{task.title}</span>
+        </div>
+        <div style={{ marginBottom: 12 }}>
+          <span style={{ fontWeight: 600, color: '#555', fontSize: 16 }}>Description:</span>
+          <span style={{ marginLeft: 8, fontSize: 17 }}>{task.description}</span>
+        </div>
+        <div style={{ marginBottom: 12 }}>
+          <span style={{ fontWeight: 600, color: '#555', fontSize: 16 }}>Status:</span>
+          <span style={{ marginLeft: 8, fontSize: 17 }}>{task.status}</span>
+        </div>
+        <div style={{ marginBottom: 8 }}>
+          <span style={{ fontWeight: 600, color: '#555', fontSize: 16 }}>Due Date:</span>
+          <span style={{ marginLeft: 8, fontSize: 17 }}>{new Date(task.dueDate).toLocaleDateString()}</span>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default TaskDetail; 
+export default TaskDetailModal; 
