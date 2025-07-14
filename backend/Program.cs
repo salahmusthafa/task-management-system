@@ -31,16 +31,21 @@ app.UseCors();
 
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
 
-app.MapGet("/api/tasks", async (int? page, int? pageSize) =>
+app.MapGet("/api/tasks", async (int? page, int? pageSize, string? status) =>
 {
     using var connection = new SqlConnection(connectionString);
     int p = page ?? 1;
     int ps = pageSize ?? 10;
     int offset = (p - 1) * ps;
+    string whereClause = string.IsNullOrEmpty(status) ? "" : "WHERE Status = @Status";
     var tasks = await connection.QueryAsync<Task>(
-        "SELECT * FROM Tasks ORDER BY Id DESC OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY",
-        new { Offset = offset, PageSize = ps });
-    var total = await connection.ExecuteScalarAsync<int>("SELECT COUNT(*) FROM Tasks");
+        $"SELECT * FROM Tasks {whereClause} ORDER BY Id DESC OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY",
+        new { Offset = offset, PageSize = ps, Status = status });
+    var total = await connection.ExecuteScalarAsync<int>(
+        string.IsNullOrEmpty(status)
+            ? "SELECT COUNT(*) FROM Tasks"
+            : "SELECT COUNT(*) FROM Tasks WHERE Status = @Status",
+        new { Status = status });
     return Results.Ok(new { tasks, total });
 });
 

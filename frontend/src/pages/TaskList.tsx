@@ -114,7 +114,7 @@ const TaskList: React.FC = () => {
 
   const fetchTasks = () => {
     setLoading(true);
-    getTasks(page, pageSize)
+    getTasks(page, pageSize, statusFilter)
       .then((data) => {
         setTasks(data.tasks);
         setTotal(data.total);
@@ -129,18 +129,13 @@ const TaskList: React.FC = () => {
   useEffect(() => {
     fetchTasks();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, pageSize]);
+  }, [page, pageSize, statusFilter]);
 
   // Reset to page 1 when filter changes
   useEffect(() => {
     setPage(1);
   }, [statusFilter]);
 
-  const filteredTasks = statusFilter === 'All'
-    ? tasks
-    : tasks.filter((task) => task.status === statusFilter);
-
-  // The content to blur (top bar + grid)
   const blurred = selectedTask || editingTask || showCreateModal || deletingTask;
   const blurredContent = (
     <>
@@ -185,8 +180,8 @@ const TaskList: React.FC = () => {
         filter: blurred ? 'blur(4px)' : 'none',
         transition: 'filter 0.2s',
       }}>
-        {filteredTasks.length === 0 && !loading && <div>No tasks found.</div>}
-        {filteredTasks.map((task) => (
+        {tasks.length === 0 && !loading && <div>No tasks found.</div>}
+        {tasks.map((task) => (
           <TaskCard
             key={task.id}
             task={task}
