@@ -8,9 +8,9 @@ namespace backend.Controllers
     [Route("api/tasks")]
     public class TaskController : ControllerBase
     {
-        private readonly TaskService _service;
+        private readonly ITaskService _service;
 
-        public TaskController(TaskService service)
+        public TaskController(ITaskService service)
         {
             _service = service;
         }

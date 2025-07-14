@@ -3,7 +3,7 @@ using Dapper;
 
 namespace backend.Data
 {
-    public class TaskRepository
+    public class TaskRepository : ITaskRepository
     {
         private readonly DapperContext _context;
 
