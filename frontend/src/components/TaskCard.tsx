@@ -19,21 +19,61 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onDelete }) => {
   };
 
   return (
-    <div style={{ border: '1px solid #ccc', padding: 16, marginBottom: 8, borderRadius: 4 }}>
-      <h3>{task.title}</h3>
-      <p>Status: {task.status}</p>
-      <p>Due: {new Date(task.dueDate).toLocaleDateString()}</p>
-      <button onClick={() => navigate(`/tasks/${task.id}`)} style={{ marginTop: 8, marginRight: 8 }}>
-        View
-      </button>
-      <button onClick={() => navigate(`/edit/${task.id}`)} style={{ marginTop: 8, marginRight: 8 }}>
-        Edit
-      </button>
-      <button onClick={handleDelete} style={{ marginTop: 8, background: '#e74c3c', color: 'white' }}>
-        Delete
-      </button>
+    <div
+      style={{
+        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+        border: '1px solid #e0e0e0',
+        padding: 20,
+        borderRadius: 8,
+        background: 'white',
+        color: '#222',
+        width: '100%',
+        minHeight: 180,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        transition: 'box-shadow 0.2s, transform 0.2s',
+        cursor: 'pointer',
+      }}
+      onMouseEnter={e => {
+        (e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 16px rgba(0,0,0,0.13)';
+        (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-2px) scale(1.01)';
+      }}
+      onMouseLeave={e => {
+        (e.currentTarget as HTMLDivElement).style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
+        (e.currentTarget as HTMLDivElement).style.transform = 'none';
+      }}
+    >
+      <div>
+        <h3 style={{ margin: '0 0 8px 0', color: '#222' }}>{task.title}</h3>
+        <p style={{ margin: '0 0 4px 0', color: '#222' }}><strong>Status:</strong> {task.status}</p>
+        <p style={{ margin: '0 0 12px 0', color: '#222' }}><strong>Due:</strong> {new Date(task.dueDate).toLocaleDateString()}</p>
+      </div>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <button onClick={() => navigate(`/tasks/${task.id}`)} style={buttonStyle}>
+          View
+        </button>
+        <button onClick={() => navigate(`/edit/${task.id}`)} style={{ ...buttonStyle, background: '#f1c40f', color: '#222' }}>
+          Edit
+        </button>
+        <button onClick={handleDelete} style={{ ...buttonStyle, background: '#e74c3c', color: 'white' }}>
+          Delete
+        </button>
+      </div>
     </div>
   );
+};
+
+const buttonStyle: React.CSSProperties = {
+  background: '#3498db',
+  color: 'white',
+  border: 'none',
+  borderRadius: 4,
+  padding: '0.4rem 1rem',
+  fontSize: 15,
+  cursor: 'pointer',
+  marginTop: 8,
+  transition: 'background 0.2s',
 };
 
 export default TaskCard; 

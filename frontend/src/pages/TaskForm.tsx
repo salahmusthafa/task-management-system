@@ -60,53 +60,73 @@ const TaskForm: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>{isEdit ? 'Edit Task' : 'Create Task'}</h1>
-      {error && <div style={{ color: 'red' }}>{error}</div>}
+    <div style={{
+      maxWidth: 500,
+      margin: '0 auto',
+      background: 'white',
+      borderRadius: 8,
+      boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+      padding: 32,
+      marginTop: 32,
+      color: '#222',
+    }}>
+      <h1 style={{ marginBottom: 24, color: '#222' }}>{isEdit ? 'Edit Task' : 'Create Task'}</h1>
+      {error && <div style={{ color: 'red', marginBottom: 16 }}>{error}</div>}
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Title:</label>
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ display: 'block', marginBottom: 4 }}>Title:</label>
           <input
             type="text"
             name="title"
             value={form.title}
             onChange={handleChange}
             required
+            style={{ width: '100%', padding: 8, borderRadius: 4, border: '1px solid #ccc', fontSize: 15, background: 'white', color: '#222' }}
           />
         </div>
-        <div>
-          <label>Description:</label>
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ display: 'block', marginBottom: 4 }}>Description:</label>
           <textarea
             name="description"
             value={form.description}
             onChange={handleChange}
             required
+            style={{ width: '100%', padding: 8, borderRadius: 4, border: '1px solid #ccc', fontSize: 15, minHeight: 80, background: 'white', color: '#222' }}
           />
         </div>
-        <div>
-          <label>Status:</label>
-          <select name="status" value={form.status} onChange={handleChange} required>
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ display: 'block', marginBottom: 4 }}>Status:</label>
+          <select
+            name="status"
+            value={form.status}
+            onChange={handleChange}
+            required
+            style={{ width: '100%', padding: 8, borderRadius: 4, border: '1px solid #ccc', fontSize: 15, background: '#fff', color: '#222', appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none' }}
+          >
             {statusOptions.map((status) => (
               <option key={status} value={status}>{status}</option>
             ))}
           </select>
         </div>
-        <div>
-          <label>Due Date:</label>
+        <div style={{ marginBottom: 24 }}>
+          <label style={{ display: 'block', marginBottom: 4 }}>Due Date:</label>
           <input
             type="date"
             name="dueDate"
             value={form.dueDate}
             onChange={handleChange}
             required
+            style={{ width: '100%', padding: 8, borderRadius: 4, border: '1px solid #ccc', fontSize: 15, background: 'white', color: '#222' }}
           />
         </div>
-        <button type="submit" disabled={loading} style={{ marginTop: 16 }}>
-          {loading ? 'Saving...' : isEdit ? 'Update Task' : 'Create Task'}
-        </button>
-        <button type="button" onClick={() => navigate('/')} style={{ marginLeft: 8 }}>
-          Cancel
-        </button>
+        <div style={{ display: 'flex', gap: 12 }}>
+          <button type="submit" disabled={loading} style={{ background: '#3498db', color: 'white', border: 'none', borderRadius: 4, padding: '0.5rem 1.2rem', fontSize: 16, cursor: 'pointer' }}>
+            {loading ? 'Saving...' : isEdit ? 'Update Task' : 'Create Task'}
+          </button>
+          <button type="button" onClick={() => navigate('/')} style={{ background: '#e0e0e0', color: '#222', border: 'none', borderRadius: 4, padding: '0.5rem 1.2rem', fontSize: 16, cursor: 'pointer' }}>
+            Cancel
+          </button>
+        </div>
       </form>
     </div>
   );

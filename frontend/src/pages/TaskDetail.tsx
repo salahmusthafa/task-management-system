@@ -25,13 +25,22 @@ const TaskDetail: React.FC = () => {
   if (!task) return <div>Task not found.</div>;
 
   return (
-    <div>
-      <h1>Task Details</h1>
-      <p><strong>Title:</strong> {task.title}</p>
-      <p><strong>Description:</strong> {task.description}</p>
-      <p><strong>Status:</strong> {task.status}</p>
-      <p><strong>Due Date:</strong> {new Date(task.dueDate).toLocaleDateString()}</p>
-      <button onClick={() => navigate(-1)} style={{ marginTop: 16 }}>Back</button>
+    <div style={{
+      maxWidth: 500,
+      margin: '0 auto',
+      background: 'white',
+      borderRadius: 8,
+      boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+      padding: 32,
+      marginTop: 32,
+      color: '#222',
+    }}>
+      <h1 style={{ marginBottom: 24, color: '#222' }}>Task Details</h1>
+      <p style={{ marginBottom: 12, color: '#222' }}><strong>Title:</strong> {task.title}</p>
+      <p style={{ marginBottom: 12, color: '#222' }}><strong>Description:</strong> {task.description}</p>
+      <p style={{ marginBottom: 12, color: '#222' }}><strong>Status:</strong> {task.status}</p>
+      <p style={{ marginBottom: 24, color: '#222' }}><strong>Due Date:</strong> {new Date(task.dueDate).toLocaleDateString()}</p>
+      <button onClick={() => navigate(-1)} style={{ background: '#e0e0e0', color: '#222', border: 'none', borderRadius: 4, padding: '0.5rem 1.2rem', fontSize: 16, cursor: 'pointer' }}>Back</button>
     </div>
   );
 };
