@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getTasks } from '../services/api';
 import type { Task, TaskStatus } from '../types/task';
 import TaskCard from '../components/TaskCard';
@@ -10,8 +11,9 @@ const TaskList: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<TaskStatus | 'All'>('All');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  useEffect(() => {
+  const fetchTasks = () => {
     setLoading(true);
     getTasks()
       .then((data) => {
@@ -22,6 +24,10 @@ const TaskList: React.FC = () => {
         setError('Failed to load tasks');
       })
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchTasks();
   }, []);
 
   const filteredTasks = statusFilter === 'All'
@@ -31,6 +37,9 @@ const TaskList: React.FC = () => {
   return (
     <div>
       <h1>Task List</h1>
+      <button onClick={() => navigate('/create')} style={{ marginBottom: 16 }}>
+        + Create Task
+      </button>
       <div style={{ marginBottom: 16 }}>
         <label>Status Filter: </label>
         <select
@@ -48,7 +57,7 @@ const TaskList: React.FC = () => {
       <div>
         {filteredTasks.length === 0 && !loading && <div>No tasks found.</div>}
         {filteredTasks.map((task) => (
-          <TaskCard key={task.id} task={task} />
+          <TaskCard key={task.id} task={task} onDelete={fetchTasks} />
         ))}
       </div>
     </div>

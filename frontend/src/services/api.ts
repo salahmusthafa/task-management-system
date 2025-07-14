@@ -24,4 +24,8 @@ export const updateTask = async (id: number, task: Omit<Task, 'id'>): Promise<vo
   await api.put(`/tasks/${id}`, task);
 };
 
+export const deleteTask = async (id: number): Promise<void> => {
+  await api.delete(`/tasks/${id}`);
+};
+
 export default api; 
