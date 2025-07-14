@@ -29,6 +29,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onDelete, onView, onEdit }) =
 
   return (
     <div
+      role="button"
       style={{
         boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
         border: '1px solid #e0e0e0',
