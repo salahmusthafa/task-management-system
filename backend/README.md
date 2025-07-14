@@ -1,48 +1,73 @@
-# Task Management System Backend (.NET 8 Minimal API)
+# Backend (.NET API)
+
+This is the backend API for the Task Management System, built with .NET 8, Dapper, and SQL Server.
 
 ## Prerequisites
 - .NET 8 SDK
-- SQL Server (local or remote)
+- SQL Server (local or cloud)
 
-## Setup
+## Setup Instructions
+1. Restore dependencies:
+   ```sh
+   dotnet restore
+   ```
+2. Build the project:
+   ```sh
+   dotnet build
+   ```
+3. Update the connection string in `appsettings.json` as needed.
+4. Run the API:
+   ```sh
+   dotnet run
+   ```
+   The API will be available at `http://localhost:5168` (default).
 
-1. **Configure the database connection string**
-   - Edit `appsettings.json` and update `DefaultConnection` under `ConnectionStrings` with your SQL Server details.
+## Database Setup
+- Use the provided SQL script (`TaskManagementSystem.sql`) to create the database and `TaskCard` table.
+- Example connection string in `appsettings.json`:
+  ```json
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Database=TaskManagementSystem;User Id=sa;Password=your_password;TrustServerCertificate=True;"
+  }
+  ```
 
-2. **Install dependencies**
-   - Run:
-     ```sh
-     dotnet restore
-     ```
+## API Endpoints
 
-3. **Create the database and Tasks table**
-   - Run the SQL script below in your SQL Server:
+| Method | Endpoint                | Description                |
+|--------|-------------------------|----------------------------|
+| GET    | /api/tasks              | List all tasks (with filter/pagination) |
+| GET    | /api/tasks/{id}         | Get a specific task        |
+| POST   | /api/tasks              | Create a new task          |
+| PUT    | /api/tasks/{id}         | Update a task              |
+| DELETE | /api/tasks/{id}         | Delete a task              |
 
-```sql
-CREATE TABLE Tasks (
-    Id INT IDENTITY(1,1) PRIMARY KEY,
-    Title NVARCHAR(200) NOT NULL,
-    Description NVARCHAR(MAX) NOT NULL,
-    Status NVARCHAR(50) NOT NULL,
-    DueDate DATETIME2 NOT NULL
-);
+### Example Task Object
+```json
+{
+  "id": 1,
+  "title": "Sample Task",
+  "description": "Description here",
+  "status": "To Do",
+  "dueDate": "2024-12-31T23:59:59Z"
+}
 ```
 
-4. **Run the API**
-   - From the `backend` directory, run:
-     ```sh
-     dotnet run
-     ```
-   - The API will be available at `http://localhost:5000` (or the port shown in the console).
+### Status Codes
+- 200 OK: Success
+- 201 Created: Resource created
+- 400 Bad Request: Validation error
+- 404 Not Found: Task not found
+- 500 Internal Server Error: Server error
 
-5. **API Endpoints**
-   - `GET    /api/tasks`         - List all tasks
-   - `GET    /api/tasks/{id}`    - Get a specific task
-   - `POST   /api/tasks`         - Create a new task
-   - `PUT    /api/tasks/{id}`    - Update a task
-   - `DELETE /api/tasks/{id}`    - Delete a task
+## Running Tests
+```sh
+dotnet test
+```
 
-## Notes
-- The API uses Dapper for data access.
-- Make sure your SQL Server is running and accessible from your machine.
-- For development, you can use [SQL Server Developer Edition](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) or [SQL Server Docker image](https://hub.docker.com/_/microsoft-mssql-server). 
+## Assumptions & Limitations
+- No authentication/authorization in MVP
+- Minimal validation and error handling
+- Date/times are in UTC (ISO 8601)
+
+## Contact
+For questions, contact your project lead or maintainer. 

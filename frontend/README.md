@@ -1,69 +1,48 @@
-# React + TypeScript + Vite
+# Frontend (React)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend for the Task Management System, built with React, TypeScript, and Vite.
 
-Currently, two official plugins are available:
+## Prerequisites
+- Node.js (v18+ recommended)
+- npm (v9+ recommended)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Setup Instructions
+1. Install dependencies:
+   ```sh
+   npm install
+   ```
+2. Run the app in development mode:
+   ```sh
+   npm run dev
+   ```
+   The app will be available at `http://localhost:5173` (default).
+3. To build for production:
+   ```sh
+   npm run build
+   ```
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Running Tests
+```sh
+npm test
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Project Structure
 ```
+src/
+  components/    # Reusable UI components
+  pages/         # Page-level components (TaskList, TaskDetail, TaskForm)
+  services/      # API service layer
+  types/         # TypeScript types
+```
+
+## API URL Configuration
+- The frontend expects the backend API at `http://localhost:5168` by default.
+- To change, edit the `baseURL` in `src/services/api.ts`.
+
+## Assumptions & Limitations
+- No authentication/authorization in MVP
+- Minimal validation and error handling
+- Date/times are in UTC (ISO 8601)
+
+## Contact
+For questions, contact your project lead or maintainer.
