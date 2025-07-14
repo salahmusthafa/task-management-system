@@ -56,4 +56,4 @@ See [frontend/README.md](./frontend/README.md) for detailed instructions.
 - Only basic validation and error handling in MVP
 
 ## Credits
-Developed by TaskFlow Solutions. For questions, contact your project lead. 
+Developed by TaskFlow Solutions by Salah Musthafa. For questions, contact salahmusthafa2@gmail.com.
