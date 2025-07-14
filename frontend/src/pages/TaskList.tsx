@@ -78,7 +78,7 @@ const TaskList: React.FC = () => {
       </div>
       <div style={{
         display: 'grid',
-        gap: 60,
+        gap: '30px 55px',
         gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
         width: '100%',
         paddingBottom: 10,
