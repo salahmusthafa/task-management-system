@@ -52,6 +52,15 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onDelete, onView, onEdit }) =
         (e.currentTarget as HTMLDivElement).style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
         (e.currentTarget as HTMLDivElement).style.transform = 'none';
       }}
+      onClick={() => (onView ? onView() : navigate(`/tasks/${task.id}`))}
+      tabIndex={0}
+      aria-label={`View details for task: ${task.title}`}
+      onKeyDown={e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onView ? onView() : navigate(`/tasks/${task.id}`);
+        }
+      }}
     >
       <span
         style={{
@@ -74,13 +83,22 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onDelete, onView, onEdit }) =
         <p style={{ margin: '0 0 12px 0', color: '#222' }}><strong>Due:</strong> {new Date(task.dueDate).toLocaleDateString()}</p>
       </div>
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-        <button onClick={onView ? onView : () => navigate(`/tasks/${task.id}`)} style={buttonStyle}>
+        <button
+          onClick={e => { e.stopPropagation(); onView ? onView() : navigate(`/tasks/${task.id}`); }}
+          style={buttonStyle}
+        >
           View
         </button>
-        <button onClick={onEdit ? onEdit : () => navigate(`/edit/${task.id}`)} style={{ ...buttonStyle, background: '#f1c40f', color: '#222' }}>
+        <button
+          onClick={e => { e.stopPropagation(); onEdit ? onEdit() : navigate(`/edit/${task.id}`); }}
+          style={{ ...buttonStyle, background: '#f1c40f', color: '#222' }}
+        >
           Edit
         </button>
-        <button onClick={handleDelete} style={{ ...buttonStyle, background: '#e74c3c', color: 'white' }}>
+        <button
+          onClick={e => { e.stopPropagation(); handleDelete(); }}
+          style={{ ...buttonStyle, background: '#e74c3c', color: 'white' }}
+        >
           Delete
         </button>
       </div>
