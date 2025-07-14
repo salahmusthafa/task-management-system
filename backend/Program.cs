@@ -38,7 +38,7 @@ app.MapGet("/api/tasks", async (int? page, int? pageSize) =>
     int ps = pageSize ?? 10;
     int offset = (p - 1) * ps;
     var tasks = await connection.QueryAsync<Task>(
-        "SELECT * FROM Tasks ORDER BY Id OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY",
+        "SELECT * FROM Tasks ORDER BY Id DESC OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY",
         new { Offset = offset, PageSize = ps });
     var total = await connection.ExecuteScalarAsync<int>("SELECT COUNT(*) FROM Tasks");
     return Results.Ok(new { tasks, total });
