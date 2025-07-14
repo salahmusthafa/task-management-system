@@ -167,7 +167,17 @@ const TaskFormModal: React.FC<TaskFormModalProps> = ({ task, onClose, onSaved })
               value={form.description}
               onChange={handleChange}
               required
-              style={{ width: '100%', padding: 8, borderRadius: 4, border: '1px solid #ccc', fontSize: 15, minHeight: 60, background: 'white', color: '#222' }}
+              style={{
+                width: '100%',
+                padding: 8,
+                borderRadius: 4,
+                border: '1px solid #ccc',
+                fontSize: 15,
+                minHeight: 60,
+                background: 'white',
+                color: '#222',
+                fontFamily: 'inherit'
+              }}
             />
             {formErrors.description && <div style={{ color: 'red', marginTop: 4 }}>{formErrors.description}</div>}
           </div>
