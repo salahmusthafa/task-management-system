@@ -10,6 +10,12 @@ interface TaskCardProps {
   onEdit?: () => void;
 }
 
+const statusColor = {
+  'To Do': { bg: '#e0e0e0', text: '#222' },
+  'In Progress': { bg: '#ffe082', text: '#b26a00' },
+  'Done': { bg: '#b9f6ca', text: '#00695c' },
+};
+
 const TaskCard: React.FC<TaskCardProps> = ({ task, onDelete, onView, onEdit }) => {
   const navigate = useNavigate();
 
@@ -47,6 +53,21 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onDelete, onView, onEdit }) =
         (e.currentTarget as HTMLDivElement).style.transform = 'none';
       }}
     >
+      <span
+        style={{
+          display: 'inline-block',
+          padding: '2px 12px',
+          borderRadius: 12,
+          fontSize: 13,
+          fontWeight: 600,
+          color: statusColor[task.status].text,
+          background: statusColor[task.status].bg,
+          marginBottom: 8,
+          alignSelf: 'flex-start',
+        }}
+      >
+        {task.status}
+      </span>
       <div>
         <h3 style={{ margin: '0 0 8px 0', color: '#222' }}>{task.title}</h3>
         <p style={{ margin: '0 0 4px 0', color: '#222' }}><strong>Status:</strong> {task.status}</p>

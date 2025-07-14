@@ -9,76 +9,94 @@ import ReactDOM from 'react-dom';
 
 const statusOptions: TaskStatus[] = ['To Do', 'In Progress', 'Done'];
 
-const DeleteTaskModal: React.FC<{ task: Task; onClose: () => void; onDeleted: () => void }> = ({ task, onClose, onDeleted }) => (
-  <div
-    style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      background: 'rgba(0,0,0,0.25)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 2000,
-    }}
-    onClick={onClose}
-  >
+const DeleteTaskModal: React.FC<{ task: Task; onClose: () => void; onDeleted: () => void }> = ({ task, onClose, onDeleted }) => {
+  const modalRef = React.useRef<HTMLDivElement>(null);
+  const lastActiveElement = React.useRef<HTMLElement | null>(null);
+  React.useEffect(() => {
+    lastActiveElement.current = document.activeElement as HTMLElement;
+    modalRef.current?.focus();
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      lastActiveElement.current?.focus();
+    };
+  }, [onClose]);
+  return (
     <div
       style={{
-        background: 'white',
-        borderRadius: 12,
-        boxShadow: '0 4px 24px rgba(0,0,0,0.13)',
-        padding: 32,
-        minWidth: 320,
-        maxWidth: 420,
-        width: '90vw',
-        color: '#222',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        background: 'rgba(0,0,0,0.25)',
         display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        position: 'relative',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 2000,
       }}
-      onClick={e => e.stopPropagation()}
+      onClick={onClose}
     >
-      <button
-        onClick={onClose}
+      <div
+        ref={modalRef}
+        tabIndex={-1}
         style={{
-          position: 'absolute',
-          top: 12,
-          right: 12,
-          background: 'transparent',
-          border: 'none',
-          fontSize: 22,
-          color: '#888',
-          cursor: 'pointer',
+          background: 'white',
+          borderRadius: 12,
+          boxShadow: '0 4px 24px rgba(0,0,0,0.13)',
+          padding: 32,
+          minWidth: 320,
+          maxWidth: 420,
+          width: '90vw',
+          color: '#222',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          position: 'relative',
         }}
-        aria-label="Close"
+        onClick={e => e.stopPropagation()}
       >
-        ×
-      </button>
-      <h2 style={{ marginBottom: 16, fontSize: 24, fontWeight: 700, color: '#222' }}>Delete Task</h2>
-      <div style={{ marginBottom: 24, fontSize: 17 }}>
-        Are you sure you want to delete <b>{task.title}</b>?
-      </div>
-      <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end', width: '100%' }}>
         <button
           onClick={onClose}
-          style={{ background: '#e0e0e0', color: '#222', border: 'none', borderRadius: 4, padding: '0.5rem 1.2rem', fontSize: 16, cursor: 'pointer' }}
+          style={{
+            position: 'absolute',
+            top: 12,
+            right: 12,
+            background: 'transparent',
+            border: 'none',
+            fontSize: 22,
+            color: '#888',
+            cursor: 'pointer',
+          }}
+          aria-label="Close"
         >
-          Cancel
+          ×
         </button>
-        <button
-          onClick={async () => { await apiDeleteTask(task.id); onDeleted(); onClose(); }}
-          style={{ background: '#e74c3c', color: 'white', border: 'none', borderRadius: 4, padding: '0.5rem 1.2rem', fontSize: 16, cursor: 'pointer' }}
-        >
-          Delete
-        </button>
+        <h2 style={{ marginBottom: 16, fontSize: 24, fontWeight: 700, color: '#222' }}>Delete Task</h2>
+        <div style={{ marginBottom: 24, fontSize: 17 }}>
+          Are you sure you want to delete <b>{task.title}</b>?
+        </div>
+        <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end', width: '100%' }}>
+          <button
+            onClick={onClose}
+            style={{ background: '#e0e0e0', color: '#222', border: 'none', borderRadius: 4, padding: '0.5rem 1.2rem', fontSize: 16, cursor: 'pointer' }}
+          >
+            Cancel
+          </button>
+          <button
+            onClick={async () => { await apiDeleteTask(task.id); onDeleted(); onClose(); }}
+            style={{ background: '#e74c3c', color: 'white', border: 'none', borderRadius: 4, padding: '0.5rem 1.2rem', fontSize: 16, cursor: 'pointer' }}
+          >
+            Delete
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const TaskList: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -89,13 +107,17 @@ const TaskList: React.FC = () => {
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [deletingTask, setDeletingTask] = useState<Task | null>(null);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(12);
+  const [total, setTotal] = useState(0);
   const navigate = useNavigate();
 
   const fetchTasks = () => {
     setLoading(true);
-    getTasks()
+    getTasks(page, pageSize)
       .then((data) => {
-        setTasks(data);
+        setTasks(data.tasks);
+        setTotal(data.total);
         setError(null);
       })
       .catch(() => {
@@ -106,7 +128,13 @@ const TaskList: React.FC = () => {
 
   useEffect(() => {
     fetchTasks();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, pageSize]);
+
+  // Reset to page 1 when filter changes
+  useEffect(() => {
+    setPage(1);
+  }, [statusFilter]);
 
   const filteredTasks = statusFilter === 'All'
     ? tasks
@@ -150,7 +178,7 @@ const TaskList: React.FC = () => {
       </div>
       <div style={{
         display: 'grid',
-        gap: '30px 55px',
+        gap: '15px 55px',
         gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
         width: '100%',
         paddingBottom: 10,
@@ -167,6 +195,64 @@ const TaskList: React.FC = () => {
             onEdit={() => setEditingTask(task)}
           />
         ))}
+      </div>
+      {/* Pagination Controls */}
+      <div
+        style={{
+          position: 'fixed',
+          left: 0,
+          bottom: 0,
+          width: '100vw',
+          background: 'rgba(255,255,255,0.97)',
+          boxShadow: '0 -2px 16px rgba(0,0,0,0.07)',
+          zIndex: 100,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '18px 0 14px 0',
+          gap: 12,
+          filter: blurred ? 'blur(4px)' : 'none',
+          transition: 'filter 0.2s',
+        }}
+        aria-label="Pagination navigation"
+      >
+        <button
+          onClick={() => setPage((p) => Math.max(1, p - 1))}
+          disabled={page === 1}
+          aria-label="Previous Page"
+          style={{ padding: '0.4rem 1rem', borderRadius: 4, border: '1px solid #ccc', background: page === 1 ? '#eee' : '#fff', color: '#222', cursor: page === 1 ? 'not-allowed' : 'pointer' }}
+        >
+          Previous
+        </button>
+        {Array.from({ length: Math.ceil(total / pageSize) }, (_, i) => i + 1).map((pg) => (
+          <button
+            key={pg}
+            onClick={() => setPage(pg)}
+            aria-current={pg === page ? 'page' : undefined}
+            style={{
+              padding: '0.4rem 0.9rem',
+              borderRadius: 4,
+              border: pg === page ? '2px solid #3498db' : '1px solid #ccc',
+              background: pg === page ? '#3498db' : '#fff',
+              color: pg === page ? 'white' : '#222',
+              fontWeight: pg === page ? 700 : 400,
+              cursor: pg === page ? 'default' : 'pointer',
+              outline: 'none',
+              margin: '0 2px',
+            }}
+            disabled={pg === page}
+          >
+            {pg}
+          </button>
+        ))}
+        <button
+          onClick={() => setPage((p) => p + 1)}
+          disabled={page >= Math.ceil(total / pageSize)}
+          aria-label="Next Page"
+          style={{ padding: '0.4rem 1rem', borderRadius: 4, border: '1px solid #ccc', background: page >= Math.ceil(total / pageSize) ? '#eee' : '#fff', color: '#222', cursor: page >= Math.ceil(total / pageSize) ? 'not-allowed' : 'pointer' }}
+        >
+          Next
+        </button>
       </div>
     </>
   );

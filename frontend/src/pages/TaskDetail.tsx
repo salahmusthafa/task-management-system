@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import type { Task } from '../types/task';
 
 interface TaskDetailModalProps {
@@ -7,6 +7,22 @@ interface TaskDetailModalProps {
 }
 
 const TaskDetailModal: React.FC<TaskDetailModalProps> = ({ task, onClose }) => {
+  const modalRef = useRef<HTMLDivElement>(null);
+  const lastActiveElement = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    lastActiveElement.current = document.activeElement as HTMLElement;
+    modalRef.current?.focus();
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      lastActiveElement.current?.focus();
+    };
+  }, [onClose]);
+
   return (
     <div
       style={{
@@ -24,6 +40,8 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({ task, onClose }) => {
       onClick={onClose}
     >
       <div
+        ref={modalRef}
+        tabIndex={-1}
         style={{
           background: 'white',
           borderRadius: 12,

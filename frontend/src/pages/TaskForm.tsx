@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import type { Task, TaskStatus } from '../types/task';
 import { createTask, updateTask, getTask } from '../services/api';
 
@@ -12,14 +12,29 @@ const statusOptions: TaskStatus[] = ['To Do', 'In Progress', 'Done'];
 
 const TaskFormModal: React.FC<TaskFormModalProps> = ({ task, onClose, onSaved }) => {
   const isEdit = !!task;
-  const [form, setForm] = useState<Omit<Task, 'id'>>({
+  const [form, setForm] = React.useState<Omit<Task, 'id'>>({
     title: '',
     description: '',
     status: 'To Do',
     dueDate: new Date().toISOString().slice(0, 10),
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const lastActiveElement = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    lastActiveElement.current = document.activeElement as HTMLElement;
+    modalRef.current?.focus();
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      lastActiveElement.current?.focus();
+    };
+  }, [onClose]);
 
   useEffect(() => {
     if (isEdit && task) {
@@ -73,6 +88,8 @@ const TaskFormModal: React.FC<TaskFormModalProps> = ({ task, onClose, onSaved })
       onClick={onClose}
     >
       <div
+        ref={modalRef}
+        tabIndex={-1}
         style={{
           background: 'white',
           borderRadius: 12,

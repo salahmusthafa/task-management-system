@@ -6,4 +6,9 @@ export interface Task {
   description: string;
   status: TaskStatus;
   dueDate: string; // ISO date string
+}
+
+export interface PaginatedTasksResponse {
+  tasks: Task[];
+  total: number;
 } 

@@ -1,12 +1,12 @@
 import axios from 'axios';
-import type { Task } from '../types/task';
+import type { Task, PaginatedTasksResponse } from '../types/task';
 
 const api = axios.create({
   baseURL: 'http://localhost:5168/api', // Use the backend's URL
 });
 
-export const getTasks = async (): Promise<Task[]> => {
-  const response = await api.get<Task[]>('/tasks');
+export const getTasks = async (page = 1, pageSize = 10): Promise<PaginatedTasksResponse> => {
+  const response = await api.get<PaginatedTasksResponse>(`/tasks?page=${page}&pageSize=${pageSize}`);
   return response.data;
 };
 
