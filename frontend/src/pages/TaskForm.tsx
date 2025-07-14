@@ -10,6 +10,23 @@ interface TaskFormModalProps {
 
 const statusOptions: TaskStatus[] = ['To Do', 'In Progress', 'Done'];
 
+const validate = (values: Omit<Task, 'id'>) => {
+  const errors: Partial<Record<keyof Omit<Task, 'id'>, string>> = {};
+  if (!values.title || values.title.trim().length < 3) {
+    errors.title = 'Title is required (min 3 chars)';
+  }
+  if (!values.description || values.description.trim().length < 5) {
+    errors.description = 'Description is required (min 5 chars)';
+  }
+  if (!values.status || !statusOptions.includes(values.status as TaskStatus)) {
+    errors.status = 'Status is required';
+  }
+  if (!values.dueDate) {
+    errors.dueDate = 'Due date is required';
+  }
+  return errors;
+};
+
 const TaskFormModal: React.FC<TaskFormModalProps> = ({ task, onClose, onSaved }) => {
   const isEdit = !!task;
   const [form, setForm] = React.useState<Omit<Task, 'id'>>({
@@ -20,6 +37,7 @@ const TaskFormModal: React.FC<TaskFormModalProps> = ({ task, onClose, onSaved })
   });
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [formErrors, setFormErrors] = React.useState<Partial<Record<keyof Omit<Task, 'id'>, string>>>({});
   const modalRef = useRef<HTMLDivElement>(null);
   const lastActiveElement = useRef<HTMLElement | null>(null);
 
@@ -54,8 +72,13 @@ const TaskFormModal: React.FC<TaskFormModalProps> = ({ task, onClose, onSaved })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError(null);
+    const validationErrors = validate(form);
+    setFormErrors(validationErrors);
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
+    setLoading(true);
     try {
       if (isEdit && task) {
         await updateTask(task.id, form);
@@ -135,6 +158,7 @@ const TaskFormModal: React.FC<TaskFormModalProps> = ({ task, onClose, onSaved })
               required
               style={{ width: '100%', padding: 8, borderRadius: 4, border: '1px solid #ccc', fontSize: 15, background: 'white', color: '#222' }}
             />
+            {formErrors.title && <div style={{ color: 'red', marginTop: 4 }}>{formErrors.title}</div>}
           </div>
           <div style={{ marginBottom: 12 }}>
             <label style={{ display: 'block', marginBottom: 4 }}>Description:</label>
@@ -145,6 +169,7 @@ const TaskFormModal: React.FC<TaskFormModalProps> = ({ task, onClose, onSaved })
               required
               style={{ width: '100%', padding: 8, borderRadius: 4, border: '1px solid #ccc', fontSize: 15, minHeight: 60, background: 'white', color: '#222' }}
             />
+            {formErrors.description && <div style={{ color: 'red', marginTop: 4 }}>{formErrors.description}</div>}
           </div>
           <div style={{ marginBottom: 12 }}>
             <label style={{ display: 'block', marginBottom: 4 }}>Status:</label>
@@ -159,6 +184,7 @@ const TaskFormModal: React.FC<TaskFormModalProps> = ({ task, onClose, onSaved })
                 <option key={status} value={status}>{status}</option>
               ))}
             </select>
+            {formErrors.status && <div style={{ color: 'red', marginTop: 4 }}>{formErrors.status}</div>}
           </div>
           <div style={{ marginBottom: 18 }}>
             <label style={{ display: 'block', marginBottom: 4 }}>Due Date:</label>
@@ -170,6 +196,7 @@ const TaskFormModal: React.FC<TaskFormModalProps> = ({ task, onClose, onSaved })
               required
               style={{ width: '100%', padding: 8, borderRadius: 4, border: '1px solid #ccc', fontSize: 15, background: 'white', color: '#222' }}
             />
+            {formErrors.dueDate && <div style={{ color: 'red', marginTop: 4 }}>{formErrors.dueDate}</div>}
           </div>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
             <button type="submit" disabled={loading} style={{ background: '#3498db', color: 'white', border: 'none', borderRadius: 4, padding: '0.5rem 1.2rem', fontSize: 16, cursor: 'pointer' }}>
