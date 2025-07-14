@@ -6,6 +6,7 @@ import { deleteTask } from '../services/api';
 interface TaskCardProps {
   task: Task;
   onDelete?: () => void;
+  minWidth?: number;
 }
 
 const TaskCard: React.FC<TaskCardProps> = ({ task, onDelete }) => {

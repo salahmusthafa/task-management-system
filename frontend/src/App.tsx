@@ -55,10 +55,8 @@ const App: React.FC = () => {
             marginTop: HEADER_HEIGHT + 8,
             minHeight: '100vh',
             background: '#f7f8fa',
-            maxWidth: 1200,
-            width: '100%',
-            marginLeft: 'auto',
-            marginRight: 'auto',
+            width: '100vw',
+            boxSizing: 'border-box',
           }}
         >
           <Routes>
