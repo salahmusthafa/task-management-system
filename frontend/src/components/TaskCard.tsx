@@ -23,6 +23,9 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onDelete }) => {
       <h3>{task.title}</h3>
       <p>Status: {task.status}</p>
       <p>Due: {new Date(task.dueDate).toLocaleDateString()}</p>
+      <button onClick={() => navigate(`/tasks/${task.id}`)} style={{ marginTop: 8, marginRight: 8 }}>
+        View
+      </button>
       <button onClick={() => navigate(`/edit/${task.id}`)} style={{ marginTop: 8, marginRight: 8 }}>
         Edit
       </button>
