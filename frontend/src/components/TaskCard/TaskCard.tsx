@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Task } from '../../types/task';
 import { useNavigate } from 'react-router-dom';
-import { deleteTask } from '../../services/api';
+import { deleteTask } from '../../services/taskApi';
 import styles from './TaskCard.module.css';
 
 interface TaskCardProps {

@@ -37,7 +37,7 @@ src/
 
 ## API URL Configuration
 - The frontend expects the backend API at `http://localhost:5168` by default.
-- To change, edit the `baseURL` in `src/services/api.ts`.
+- To change, edit the `baseURL` in `src/services/taskApi.ts`.
 
 ## Assumptions & Limitations
 - No authentication/authorization in MVP
@@ -45,4 +45,4 @@ src/
 - Date/times are in UTC (ISO 8601)
 
 ## Contact
-For questions, contact your project lead or maintainer.
+For questions, contact salahmusthafa2@gmail.com

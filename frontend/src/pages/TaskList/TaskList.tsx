@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getTasks, deleteTask as apiDeleteTask } from '../../services/api';
+import { getTasks, deleteTask as apiDeleteTask } from '../../services/taskApi';
 import type { Task, TaskStatus } from '../../types/task';
 import TaskCard from '../../components/TaskCard/TaskCard';
 import TaskDetailModal from '../TaskDetail/TaskDetail';

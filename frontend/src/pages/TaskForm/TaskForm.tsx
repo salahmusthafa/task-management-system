@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import type { Task, TaskStatus } from '../../types/task';
-import { createTask, updateTask, getTask } from '../../services/api';
+import { createTask, updateTask, getTask } from '../../services/taskApi';
 import styles from './TaskForm.module.css';
 
 interface TaskFormModalProps {

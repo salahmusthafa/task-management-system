@@ -2,6 +2,9 @@
 
 A lightweight, intuitive web application for managing daily tasks and team assignments. Built with React.js (frontend), .NET (backend), and SQL Server (database).
 
+## 📁 Repository
+**GitHub:** [https://github.com/salahmusthafa/task-management-system](https://github.com/salahmusthafa/task-management-system)
+
 ## Features
 - Create, assign, and manage tasks
 - Track progress (To Do, In Progress, Done)
@@ -56,4 +59,4 @@ See [frontend/README.md](./frontend/README.md) for detailed instructions.
 - Only basic validation and error handling in MVP
 
 ## Credits
-Developed by TaskFlow Solutions by Salah Musthafa. For questions, contact salahmusthafa2@gmail.com.
+Developed for TaskFlow Solutions by Salah Musthafa. For questions, contact salahmusthafa2@gmail.com.

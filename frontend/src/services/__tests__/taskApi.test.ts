@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { TaskStatus } from '../../types/task';
 
 // Mock the API module
-vi.mock('../api', () => ({
+vi.mock('../taskApi', () => ({
   getTasks: vi.fn(),
   getTask: vi.fn(),
   createTask: vi.fn(),
@@ -11,7 +11,7 @@ vi.mock('../api', () => ({
 }));
 
 // Import after mocking
-import { getTasks, getTask, createTask, updateTask, deleteTask } from '../api';
+import { getTasks, getTask, createTask, updateTask, deleteTask } from '../taskApi';
 
 describe('API Service', () => {
   beforeEach(() => {
