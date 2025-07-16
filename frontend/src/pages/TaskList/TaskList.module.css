@@ -82,9 +82,26 @@
   gap: 15px 55px;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   width: 100%;
-  padding-bottom: 10px;
+  padding-bottom: 120px; /* Add space for fixed pagination */
   filter: var(--blur, none);
   transition: filter 0.2s;
+}
+
+/* Responsive grid adjustments */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px 20px;
+    padding-bottom: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    padding-bottom: 90px;
+  }
 }
 
 .pagination {
