@@ -16,12 +16,12 @@
 }
 
 .card {
-  box-shadow: var(--color-shadow);
-  border: 1px solid var(--color-border);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid #e0e0e0;
   padding: 20px;
   border-radius: 8px;
-  background: var(--color-bg);
-  color: var(--color-text);
+  background: white;
+  color: #222;
   width: 100%;
   min-height: 180px;
   display: flex;
@@ -30,58 +30,41 @@
   transition: box-shadow 0.2s, transform 0.2s;
   cursor: pointer;
 }
-.card:focus,
-.card:active,
+
 .card:hover {
-  box-shadow: var(--color-shadow-hover);
-  transform: translateY(-2px) scale(1.01);
-  outline: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+  transform: translateY(-2px);
 }
 
-.status {
-  display: inline-block;
-  padding: 2px 12px;
-  border-radius: 12px;
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  align-self: flex-start;
-}
-.status.todo {
-  background: var(--color-status-todo-bg);
-  color: var(--color-status-todo-text);
-}
-.status.inprogress {
-  background: var(--color-status-inprogress-bg);
-  color: var(--color-status-inprogress-text);
-}
-.status.done {
-  background: var(--color-status-done-bg);
-  color: var(--color-status-done-text);
+.card:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
 }
 
 .title {
   margin: 0 0 8px 0;
-  color: var(--color-text);
-}
-.info {
-  margin: 0 0 4px 0;
-  color: var(--color-text);
-}
-.due {
-  margin: 0 0 12px 0;
-  color: var(--color-text);
+  color: #222;
 }
 
-.buttonRow {
+.status {
+  margin: 0 0 4px 0;
+  color: #222;
+}
+
+.dueDate {
+  margin: 0 0 12px 0;
+  color: #222;
+}
+
+.actions {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
 }
-.button {
-  background: var(--color-primary);
-  color: #fff;
-  border: none;
+
+.viewButton {
+  background: #667eea;
+  color: white;
   border-radius: 4px;
   padding: 0.4rem 1rem;
   font-size: 15px;
@@ -89,16 +72,59 @@
   margin-top: 8px;
   transition: background 0.2s;
 }
-.button.warning {
-  background: var(--color-warning);
-  color: var(--color-text);
+
+.editButton {
+  background: #f1c40f;
+  color: #222;
+  border-radius: 4px;
+  padding: 0.4rem 1rem;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s;
 }
-.button.danger {
-  background: var(--color-danger);
-  color: #fff;
+
+.deleteButton {
+  background: #e74c3c;
+  color: white;
+  border-radius: 4px;
+  padding: 0.4rem 1rem;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s;
 }
-.button:focus,
-.button:hover {
-  filter: brightness(0.95);
-  outline: none;
+
+.viewButton:hover {
+  background: #5a6fd8;
+}
+
+.editButton:hover {
+  background: #e6b800;
+}
+
+.deleteButton:hover {
+  background: #c0392b;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #222;
+  background: #e0e0e0;
+  margin-bottom: 8px;
+  align-self: flex-start;
+}
+
+.badge.inProgress {
+  background: #ffe082;
+  color: #b26a00;
+}
+
+.badge.done {
+  background: #b9f6ca;
+  color: #00695c;
 } 
