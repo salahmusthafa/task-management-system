@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getTasks, deleteTask as apiDeleteTask } from '../services/api';
-import type { Task, TaskStatus } from '../types/task';
-import TaskCard from '../components/TaskCard';
-import TaskDetailModal from './TaskDetail';
-import TaskFormModal from './TaskForm';
+import { getTasks, deleteTask as apiDeleteTask } from '../../services/api';
+import type { Task, TaskStatus } from '../../types/task';
+import TaskCard from '../../components/TaskCard/TaskCard';
+import TaskDetailModal from '../TaskDetail/TaskDetail';
+import TaskFormModal from '../TaskForm/TaskForm';
 import ReactDOM from 'react-dom';
+import styles from './TaskList.module.css';
 
 const statusOptions: TaskStatus[] = ['To Do', 'In Progress', 'Done'];
 
@@ -25,52 +26,16 @@ const DeleteTaskModal: React.FC<{ task: Task; onClose: () => void; onDeleted: ()
     };
   }, [onClose]);
   return (
-    <div
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        background: 'rgba(0,0,0,0.25)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 2000,
-      }}
-      onClick={onClose}
-    >
+    <div className={styles.modal} onClick={onClose}>
       <div
         ref={modalRef}
         tabIndex={-1}
-        style={{
-          background: 'white',
-          borderRadius: 12,
-          boxShadow: '0 4px 24px rgba(0,0,0,0.13)',
-          padding: 32,
-          minWidth: 320,
-          maxWidth: 420,
-          width: '90vw',
-          color: '#222',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          position: 'relative',
-        }}
+        className={styles.modalContent}
         onClick={e => e.stopPropagation()}
       >
         <button
           onClick={onClose}
-          style={{
-            position: 'absolute',
-            top: 12,
-            right: 12,
-            background: 'transparent',
-            border: 'none',
-            fontSize: 22,
-            color: '#888',
-            cursor: 'pointer',
-          }}
+          className={styles.closeButton}
           aria-label="Close"
         >
           ×
@@ -82,13 +47,13 @@ const DeleteTaskModal: React.FC<{ task: Task; onClose: () => void; onDeleted: ()
         <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end', width: '100%' }}>
           <button
             onClick={onClose}
-            style={{ background: '#e0e0e0', color: '#222', border: 'none', borderRadius: 4, padding: '0.5rem 1.2rem', fontSize: 16, cursor: 'pointer' }}
+            className={styles.cancelButton}
           >
             Cancel
           </button>
           <button
             onClick={async () => { await apiDeleteTask(task.id); onDeleted(); onClose(); }}
-            style={{ background: '#e74c3c', color: 'white', border: 'none', borderRadius: 4, padding: '0.5rem 1.2rem', fontSize: 16, cursor: 'pointer' }}
+            className={styles.deleteButton}
           >
             Delete
           </button>
@@ -139,24 +104,14 @@ const TaskList: React.FC = () => {
   const blurred = selectedTask || editingTask || showCreateModal || deletingTask;
   const blurredContent = (
     <>
-      <div style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: 16,
-        marginBottom: 32,
-        width: '100%',
-        filter: blurred ? 'blur(4px)' : 'none',
-        transition: 'filter 0.2s',
-      }}>
-        <h1 style={{ margin: 0, color: '#222', flex: '1 1 200px' }}>Task List</h1>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <div className={styles.headerRow} style={{ filter: blurred ? 'blur(4px)' : 'none' }}>
+        <h1 className={styles.title}>Task List</h1>
+        <div className={styles.filterRow}>
           <label style={{ marginRight: 8, color: '#222', fontWeight: 500 }}>Status Filter:</label>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as TaskStatus | 'All')}
-            style={{ padding: '0.3rem 0.7rem', borderRadius: 4, border: '1px solid #ccc', fontSize: 15, background: '#fff', color: '#222', appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none' }}
+            className={styles.select}
           >
             <option value="All">All</option>
             {statusOptions.map((status) => (
@@ -166,20 +121,12 @@ const TaskList: React.FC = () => {
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
-          style={{ background: '#3498db', color: 'white', border: 'none', borderRadius: 4, padding: '0.5rem 1rem', fontSize: 16, cursor: 'pointer', whiteSpace: 'nowrap' }}
+          className={styles.button}
         >
           + Create Task
         </button>
       </div>
-      <div style={{
-        display: 'grid',
-        gap: '15px 55px',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-        width: '100%',
-        paddingBottom: 10,
-        filter: blurred ? 'blur(4px)' : 'none',
-        transition: 'filter 0.2s',
-      }}>
+      <div className={styles.grid} style={{ filter: blurred ? 'blur(4px)' : 'none' }}>
         {tasks.length === 0 && !loading && <div>No tasks found.</div>}
         {tasks.map((task) => (
           <TaskCard
@@ -193,29 +140,15 @@ const TaskList: React.FC = () => {
       </div>
       {/* Pagination Controls */}
       <div
-        style={{
-          position: 'fixed',
-          left: 0,
-          bottom: 0,
-          width: '100vw',
-          background: 'rgba(255,255,255,0.97)',
-          boxShadow: '0 -2px 16px rgba(0,0,0,0.07)',
-          zIndex: 100,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: '18px 0 14px 0',
-          gap: 12,
-          filter: blurred ? 'blur(4px)' : 'none',
-          transition: 'filter 0.2s',
-        }}
+        className={styles.pagination}
+        style={{ filter: blurred ? 'blur(4px)' : 'none' }}
         aria-label="Pagination navigation"
       >
         <button
           onClick={() => setPage((p) => Math.max(1, p - 1))}
           disabled={page === 1}
           aria-label="Previous Page"
-          style={{ padding: '0.4rem 1rem', borderRadius: 4, border: '1px solid #ccc', background: page === 1 ? '#eee' : '#fff', color: '#222', cursor: page === 1 ? 'not-allowed' : 'pointer' }}
+          className={styles.paginationButton}
         >
           Previous
         </button>
@@ -224,17 +157,7 @@ const TaskList: React.FC = () => {
             key={pg}
             onClick={() => setPage(pg)}
             aria-current={pg === page ? 'page' : undefined}
-            style={{
-              padding: '0.4rem 0.9rem',
-              borderRadius: 4,
-              border: pg === page ? '2px solid #3498db' : '1px solid #ccc',
-              background: pg === page ? '#3498db' : '#fff',
-              color: pg === page ? 'white' : '#222',
-              fontWeight: pg === page ? 700 : 400,
-              cursor: pg === page ? 'default' : 'pointer',
-              outline: 'none',
-              margin: '0 2px',
-            }}
+            className={styles.paginationButton}
             disabled={pg === page}
           >
             {pg}
@@ -244,7 +167,7 @@ const TaskList: React.FC = () => {
           onClick={() => setPage((p) => p + 1)}
           disabled={page >= Math.ceil(total / pageSize)}
           aria-label="Next Page"
-          style={{ padding: '0.4rem 1rem', borderRadius: 4, border: '1px solid #ccc', background: page >= Math.ceil(total / pageSize) ? '#eee' : '#fff', color: '#222', cursor: page >= Math.ceil(total / pageSize) ? 'not-allowed' : 'pointer' }}
+          className={styles.paginationButton}
         >
           Next
         </button>
@@ -253,12 +176,7 @@ const TaskList: React.FC = () => {
   );
 
   return (
-    <div style={{
-      maxWidth: 1400,
-      margin: '0 auto',
-      width: '100%',
-      position: 'relative',
-    }}>
+    <div style={{ maxWidth: 1400, margin: '0 auto', width: '100%', position: 'relative' }}>
       {blurredContent}
       {selectedTask && ReactDOM.createPortal(
         <TaskDetailModal task={selectedTask} onClose={() => setSelectedTask(null)} />, document.body

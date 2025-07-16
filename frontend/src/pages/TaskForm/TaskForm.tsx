@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import type { Task, TaskStatus } from '../types/task';
-import { createTask, updateTask, getTask } from '../services/api';
+import type { Task, TaskStatus } from '../../types/task';
+import { createTask, updateTask, getTask } from '../../services/api';
+import styles from './TaskForm.module.css';
 
 interface TaskFormModalProps {
   task?: Task;
@@ -95,124 +96,78 @@ const TaskFormModal: React.FC<TaskFormModalProps> = ({ task, onClose, onSaved })
   };
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        background: 'rgba(0,0,0,0.25)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 2000,
-      }}
-      onClick={onClose}
-    >
+    <div className={styles.modal} onClick={onClose}>
       <div
         ref={modalRef}
         tabIndex={-1}
-        style={{
-          background: 'white',
-          borderRadius: 12,
-          boxShadow: '0 4px 24px rgba(0,0,0,0.13)',
-          padding: 32,
-          minWidth: 320,
-          maxWidth: 420,
-          width: '90vw',
-          color: '#222',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          position: 'relative',
-        }}
+        className={styles.modalContent}
         onClick={e => e.stopPropagation()}
       >
         <button
           onClick={onClose}
-          style={{
-            position: 'absolute',
-            top: 12,
-            right: 12,
-            background: 'transparent',
-            border: 'none',
-            fontSize: 22,
-            color: '#888',
-            cursor: 'pointer',
-          }}
+          className={styles.closeButton}
           aria-label="Close"
         >
           ×
         </button>
-        <h2 style={{ marginBottom: 16, fontSize: 24, fontWeight: 700, color: '#222' }}>{isEdit ? 'Edit Task' : 'Create Task'}</h2>
-        {error && <div style={{ color: 'red', marginBottom: 12 }}>{error}</div>}
-        <form onSubmit={handleSubmit} style={{ width: '100%' }}>
-          <div style={{ marginBottom: 12 }}>
-            <label style={{ display: 'block', marginBottom: 4 }}>Title:</label>
+        <h2 className={styles.heading}>{isEdit ? 'Edit Task' : 'Create Task'}</h2>
+        {error && <div className={styles.error} style={{ marginBottom: 12 }}>{error}</div>}
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Title:</label>
             <input
               type="text"
               name="title"
               value={form.title}
               onChange={handleChange}
               required
-              style={{ width: '100%', padding: 8, borderRadius: 4, border: '1px solid #ccc', fontSize: 15, background: 'white', color: '#222' }}
+              className={styles.input}
             />
-            {formErrors.title && <div style={{ color: 'red', marginTop: 4 }}>{formErrors.title}</div>}
+            {formErrors.title && <div className={styles.error}>{formErrors.title}</div>}
           </div>
-          <div style={{ marginBottom: 12 }}>
-            <label style={{ display: 'block', marginBottom: 4 }}>Description:</label>
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Description:</label>
             <textarea
               name="description"
               value={form.description}
               onChange={handleChange}
               required
-              style={{
-                width: '100%',
-                padding: 8,
-                borderRadius: 4,
-                border: '1px solid #ccc',
-                fontSize: 15,
-                minHeight: 60,
-                background: 'white',
-                color: '#222',
-                fontFamily: 'inherit'
-              }}
+              className={styles.textarea}
             />
-            {formErrors.description && <div style={{ color: 'red', marginTop: 4 }}>{formErrors.description}</div>}
+            {formErrors.description && <div className={styles.error}>{formErrors.description}</div>}
           </div>
-          <div style={{ marginBottom: 12 }}>
-            <label style={{ display: 'block', marginBottom: 4 }}>Status:</label>
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Status:</label>
             <select
               name="status"
               value={form.status}
               onChange={handleChange}
               required
-              style={{ width: '100%', padding: 8, borderRadius: 4, border: '1px solid #ccc', fontSize: 15, background: '#fff', color: '#222', appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none' }}
+              className={styles.select}
             >
               {statusOptions.map((status) => (
                 <option key={status} value={status}>{status}</option>
               ))}
             </select>
-            {formErrors.status && <div style={{ color: 'red', marginTop: 4 }}>{formErrors.status}</div>}
+            {formErrors.status && <div className={styles.error}>{formErrors.status}</div>}
           </div>
-          <div style={{ marginBottom: 18 }}>
-            <label style={{ display: 'block', marginBottom: 4 }}>Due Date:</label>
+          <div className={styles.formGroup} style={{ marginBottom: 18 }}>
+            <label className={styles.label}>Due Date:</label>
             <input
               type="date"
               name="dueDate"
               value={form.dueDate}
               onChange={handleChange}
               required
-              style={{ width: '100%', padding: 8, borderRadius: 4, border: '1px solid #ccc', fontSize: 15, background: 'white', color: '#222' }}
+              className={styles.input}
             />
-            {formErrors.dueDate && <div style={{ color: 'red', marginTop: 4 }}>{formErrors.dueDate}</div>}
+            {formErrors.dueDate && <div className={styles.error}>{formErrors.dueDate}</div>}
           </div>
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
-            <button type="submit" disabled={loading} style={{ background: '#3498db', color: 'white', border: 'none', borderRadius: 4, padding: '0.5rem 1.2rem', fontSize: 16, cursor: 'pointer' }}>
+          <div className={styles.actionRow}>
+            <button type="submit" disabled={loading} className={styles.button}>
               {loading ? 'Saving...' : isEdit ? 'Update Task' : 'Create Task'}
             </button>
-            <button type="button" onClick={onClose} style={{ background: '#e0e0e0', color: '#222', border: 'none', borderRadius: 4, padding: '0.5rem 1.2rem', fontSize: 16, cursor: 'pointer' }}>
+            <button type="button" onClick={onClose} className={styles.cancelButton}>
               Cancel
             </button>
           </div>

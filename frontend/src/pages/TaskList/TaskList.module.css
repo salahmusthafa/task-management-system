@@ -1,0 +1,178 @@
+:root {
+  --color-bg: #fff;
+  --color-text: #222;
+  --color-border: #e0e0e0;
+  --color-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --color-shadow-hover: 0 4px 16px rgba(0,0,0,0.13);
+  --color-modal-bg: rgba(0,0,0,0.25);
+  --color-primary: #3498db;
+  --color-warning: #f1c40f;
+  --color-danger: #e74c3c;
+  --color-pagination-bg: #fff;
+  --color-pagination-active-bg: #3498db;
+  --color-pagination-active-text: #fff;
+  --color-pagination-border: #ccc;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--color-modal-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.modalContent {
+  background: var(--color-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+  padding: 32px;
+  min-width: 320px;
+  max-width: 420px;
+  width: 90vw;
+  color: var(--color-text);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+}
+
+.closeButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  color: #888;
+  cursor: pointer;
+}
+
+.headerRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 32px;
+  width: 100%;
+  filter: var(--blur, none);
+  transition: filter 0.2s;
+}
+
+.title {
+  margin: 0;
+  color: var(--color-text);
+  flex: 1 1 200px;
+}
+
+.filterRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.grid {
+  display: grid;
+  gap: 15px 55px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  width: 100%;
+  padding-bottom: 10px;
+  filter: var(--blur, none);
+  transition: filter 0.2s;
+}
+
+.pagination {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  background: rgba(255,255,255,0.97);
+  box-shadow: 0 -2px 16px rgba(0,0,0,0.07);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 18px 0 14px 0;
+  gap: 12px;
+  filter: var(--blur, none);
+  transition: filter 0.2s;
+}
+
+.button {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+.button:focus,
+.button:hover {
+  filter: brightness(0.95);
+  outline: none;
+}
+
+.cancelButton {
+  background: #e0e0e0;
+  color: var(--color-text);
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1.2rem;
+  font-size: 16px;
+  cursor: pointer;
+}
+.deleteButton {
+  background: var(--color-danger);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1.2rem;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.select {
+  padding: 0.3rem 0.7rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  background: #fff;
+  color: var(--color-text);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.paginationButton {
+  padding: 0.4rem 1rem;
+  border-radius: 4px;
+  border: 1px solid var(--color-pagination-border);
+  background: var(--color-pagination-bg);
+  color: var(--color-text);
+  cursor: pointer;
+  outline: none;
+  margin: 0 2px;
+  font-weight: 400;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+.paginationButton[aria-current='page'] {
+  border: 2px solid var(--color-pagination-active-bg);
+  background: var(--color-pagination-active-bg);
+  color: var(--color-pagination-active-text);
+  font-weight: 700;
+  cursor: default;
+}
+.paginationButton:disabled {
+  background: #eee;
+  color: var(--color-text);
+  cursor: not-allowed;
+} 

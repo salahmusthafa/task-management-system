@@ -1,0 +1,130 @@
+:root {
+  --color-bg: #fff;
+  --color-text: #222;
+  --color-border: #e0e0e0;
+  --color-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --color-shadow-hover: 0 4px 16px rgba(0,0,0,0.13);
+  --color-modal-bg: rgba(0,0,0,0.25);
+  --color-primary: #3498db;
+  --color-warning: #f1c40f;
+  --color-danger: #e74c3c;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--color-modal-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.modalContent {
+  background: var(--color-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+  padding: 32px;
+  min-width: 320px;
+  max-width: 420px;
+  width: 90vw;
+  color: var(--color-text);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+}
+
+.closeButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  color: #888;
+  cursor: pointer;
+}
+
+.heading {
+  margin-bottom: 16px;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.form {
+  width: 100%;
+}
+
+.formGroup {
+  margin-bottom: 12px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.input,
+.textarea,
+.select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: inherit;
+}
+.textarea {
+  min-height: 60px;
+  resize: vertical;
+}
+.select {
+  background: #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.error {
+  color: red;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+.actionRow {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.button {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1.2rem;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.button:focus,
+.button:hover {
+  filter: brightness(0.95);
+  outline: none;
+}
+.cancelButton {
+  background: #e0e0e0;
+  color: var(--color-text);
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1.2rem;
+  font-size: 16px;
+  cursor: pointer;
+} 
