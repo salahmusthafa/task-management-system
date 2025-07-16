@@ -5,11 +5,30 @@ import styles from './TaskDetail.module.css';
 interface TaskDetailModalProps {
   task: Task;
   onClose: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
-const TaskDetailModal: React.FC<TaskDetailModalProps> = ({ task, onClose }) => {
+function getRelativeDueDate(dueDate: string): { label: string; className?: string } {
+  const due = new Date(dueDate);
+  const now = new Date();
+  const diff = Math.ceil((due.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+  if (diff < 0) return { label: `Overdue by ${-diff} day${-diff === 1 ? '' : 's'}`, className: styles.overdue };
+  if (diff === 0) return { label: 'Due today', className: styles.dueSoon };
+  if (diff <= 3) return { label: `Due in ${diff} day${diff === 1 ? '' : 's'}`, className: styles.dueSoon };
+  return { label: `Due in ${diff} days`, className: styles.dueDefault };
+}
+
+const TaskDetailModal: React.FC<TaskDetailModalProps> = ({ task, onClose, onEdit, onDelete }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const lastActiveElement = useRef<HTMLElement | null>(null);
+  const statusClass =
+    task.status === 'To Do'
+      ? `${styles.statusBadge} ${styles.statusTodo}`
+      : task.status === 'In Progress'
+      ? `${styles.statusBadge} ${styles.statusInProgress}`
+      : `${styles.statusBadge} ${styles.statusDone}`;
+  const dueInfo = getRelativeDueDate(task.dueDate);
 
   useEffect(() => {
     lastActiveElement.current = document.activeElement as HTMLElement;
@@ -39,23 +58,36 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({ task, onClose }) => {
         >
           ×
         </button>
-        <h2 className={styles.heading}>Task Details</h2>
-        <div className={styles.infoRow}>
+        <div className={styles.heading}>
+          <span className={statusClass}>{task.status}</span>
+          Task Details
+        </div>
+        <div className={styles.infoGrid}>
           <span className={styles.label}>Title:</span>
           <span className={styles.value}>{task.title}</span>
-        </div>
-        <div className={styles.infoRow}>
           <span className={styles.label}>Description:</span>
           <span className={styles.value}>{task.description}</span>
-        </div>
-        <div className={styles.infoRow}>
           <span className={styles.label}>Status:</span>
           <span className={styles.value}>{task.status}</span>
-        </div>
-        <div className={`${styles.infoRow} ${styles.lastRow}`}>
           <span className={styles.label}>Due Date:</span>
-          <span className={styles.value}>{new Date(task.dueDate).toLocaleDateString()}</span>
+          <span className={styles.value}>
+            {new Date(task.dueDate).toLocaleDateString()} {dueInfo && <span className={dueInfo.className}>{dueInfo.label}</span>}
+          </span>
         </div>
+        {(onEdit || onDelete) && (
+          <div className={styles.actionRow}>
+            {onEdit && (
+              <button className={`${styles.actionButton} ${styles.editButton}`} onClick={onEdit}>
+                Edit
+              </button>
+            )}
+            {onDelete && (
+              <button className={`${styles.actionButton} ${styles.deleteButton}`} onClick={onDelete}>
+                Delete
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

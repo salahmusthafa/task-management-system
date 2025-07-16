@@ -51,26 +51,103 @@
   outline: none;
 }
 
-.heading {
-  margin-bottom: 16px;
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--color-text);
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 70px;
+  padding: 2px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 0;
+  margin-right: 0;
+  text-align: center;
+}
+.statusTodo {
+  background: #e0e0e0;
+  color: #222;
+}
+.statusInProgress {
+  background: #ffe082;
+  color: #b26a00;
+}
+.statusDone {
+  background: #b9f6ca;
+  color: #00695c;
 }
 
-.infoRow {
-  margin-bottom: 12px;
+.actionRow {
   display: flex;
-  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  width: 100%;
+  justify-content: flex-end;
+}
+.actionButton {
+  background: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1.2rem;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.actionButton:focus,
+.actionButton:hover {
+  filter: brightness(0.95);
+  outline: none;
+}
+.deleteButton {
+  background: #e74c3c;
+  color: #fff;
+}
+.editButton {
+  background: #f1c40f;
+  color: #222;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 10px 18px;
+  margin-bottom: 10px;
+  width: 100%;
 }
 .label {
   font-weight: 600;
   color: #555;
   font-size: 16px;
+  align-self: center;
 }
 .value {
-  margin-left: 8px;
   font-size: 17px;
+  align-self: center;
+}
+.dueSoon {
+  color: #e67e22;
+  font-weight: 600;
+}
+.overdue {
+  color: #e74c3c;
+  font-weight: 700;
+}
+.dueDefault {
+  color: #888;
+  font-size: 15px;
+  font-style: italic;
+  font-weight: 400;
+  margin-left: 6px;
+}
+.heading {
+  margin-bottom: 10px;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .lastRow {

@@ -179,7 +179,18 @@ const TaskList: React.FC = () => {
     <div style={{ maxWidth: 1400, margin: '0 auto', width: '100%', position: 'relative' }}>
       {blurredContent}
       {selectedTask && ReactDOM.createPortal(
-        <TaskDetailModal task={selectedTask} onClose={() => setSelectedTask(null)} />, document.body
+        <TaskDetailModal
+          task={selectedTask}
+          onClose={() => setSelectedTask(null)}
+          onEdit={() => {
+            setEditingTask(selectedTask);
+            setSelectedTask(null);
+          }}
+          onDelete={() => {
+            setDeletingTask(selectedTask);
+            setSelectedTask(null);
+          }}
+        />, document.body
       )}
       {editingTask && ReactDOM.createPortal(
         <TaskFormModal task={editingTask} onClose={() => setEditingTask(null)} onSaved={fetchTasks} />, document.body
