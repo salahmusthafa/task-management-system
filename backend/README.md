@@ -23,7 +23,7 @@ This is the backend API for the Task Management System, built with .NET 8, Dappe
    The API will be available at `http://localhost:5168` (default).
 
 ## Database Setup
-- Use the provided SQL script (`TaskManagementSystem.sql`) to create the database and `TaskCard` table.
+- Use the provided SQL script ([TaskManagementSystem.sql](./TaskManagementSystem.sql)) to create the database and `TaskCard` table.
 - Example connection string in `appsettings.json`:
   ```json
   "ConnectionStrings": {

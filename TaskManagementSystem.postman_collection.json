@@ -1,12 +1,18 @@
 {
   "info": {
     "name": "Task Management System API",
-    "description": "API collection for TaskFlow's Task Management System MVP.\n\nInstructions:\n- Set the `baseUrl` variable to your backend URL (e.g., http://localhost:5168).\n- Use the requests to test all CRUD operations for tasks.",
+    "description": "API collection for TaskFlow's Task Management System MVP.\n\nInstructions:\n- Set the `baseUrl` variable in your environment or collection (e.g., http://localhost:5168).\n- Use these requests to test all CRUD operations for tasks.\n\nVariables:\n- `baseUrl`: Base URL of the API.\n- `taskId`: ID of a task to test Get/Update/Delete.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:5168" },
-    { "key": "taskId", "value": "1" }
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5168"
+    },
+    {
+      "key": "taskId",
+      "value": "1"
+    }
   ],
   "item": [
     {
@@ -15,14 +21,16 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/tasks?page=1&pageSize=10&status=To%20Do",
+          "raw": "{{baseUrl}}/api/tasks?page=1&pageSize=10&status=",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "tasks"],
           "query": [
             { "key": "page", "value": "1" },
             { "key": "pageSize", "value": "10" },
-            { "key": "status", "value": "To Do" }
+            { "key": "status", "value": "" }
           ]
         },
-        "description": "Returns a paginated list of tasks. Query params: page, pageSize, status."
+        "description": "Returns a paginated list of tasks.\n\nQuery parameters:\n- `page`: Page number (default 1)\n- `pageSize`: Number of items per page (default 10)\n- `status`: Filter by task status (optional)"
       }
     },
     {
@@ -31,9 +39,11 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/tasks/{{taskId}}"
+          "raw": "{{baseUrl}}/api/tasks/{{taskId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "tasks", "{{taskId}}"]
         },
-        "description": "Returns a single task by its ID. Path param: taskId."
+        "description": "Retrieves a single task by its ID.\n\nPath parameter:\n- `taskId`: ID of the task to retrieve."
       }
     },
     {
@@ -48,9 +58,11 @@
           "raw": "{\n  \"title\": \"New Task\",\n  \"description\": \"Task description\",\n  \"status\": \"To Do\",\n  \"dueDate\": \"2024-12-31T23:59:59Z\"\n}"
         },
         "url": {
-          "raw": "{{baseUrl}}/api/tasks"
+          "raw": "{{baseUrl}}/api/tasks",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "tasks"]
         },
-        "description": "Creates a new task."
+        "description": "Creates a new task.\n\nRequest body (JSON):\n- `title`: Task title (string, required)\n- `description`: Task details (string, optional)\n- `status`: Task status (string, e.g., 'To Do')\n- `dueDate`: Due date in ISO format (optional)"
       }
     },
     {
@@ -65,9 +77,11 @@
           "raw": "{\n  \"title\": \"Updated Task\",\n  \"description\": \"Updated description\",\n  \"status\": \"In Progress\",\n  \"dueDate\": \"2024-12-31T23:59:59Z\"\n}"
         },
         "url": {
-          "raw": "{{baseUrl}}/api/tasks/{{taskId}}"
+          "raw": "{{baseUrl}}/api/tasks/{{taskId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "tasks", "{{taskId}}"]
         },
-        "description": "Updates an existing task. Path param: taskId."
+        "description": "Updates an existing task.\n\nPath parameter:\n- `taskId`: ID of the task to update.\n\nRequest body (JSON):\n- `title`: Updated task title (string, required)\n- `description`: Updated description (string, optional)\n- `status`: New status (string)\n- `dueDate`: Updated due date in ISO format (optional)"
       }
     },
     {
@@ -76,9 +90,11 @@
         "method": "DELETE",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/tasks/{{taskId}}"
+          "raw": "{{baseUrl}}/api/tasks/{{taskId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "tasks", "{{taskId}}"]
         },
-        "description": "Deletes a task by its ID. Path param: taskId."
+        "description": "Deletes a task by its ID.\n\nPath parameter:\n- `taskId`: ID of the task to delete."
       }
     }
   ]

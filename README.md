@@ -1,5 +1,7 @@
 # Task Management System
 
+![Task Management System Screenshot](./screenshot.png)
+
 A lightweight, intuitive web application for managing daily tasks and team assignments. Built with React.js (frontend), .NET (backend), and SQL Server (database).
 
 ## 📁 Repository
@@ -60,3 +62,16 @@ See [frontend/README.md](./frontend/README.md) for detailed instructions.
 
 ## Credits
 Developed for TaskFlow Solutions by Salah Musthafa. For questions, contact salahmusthafa2@gmail.com.
+
+## API Testing with Postman
+
+A Postman collection is provided to help you test the API endpoints easily.
+
+- **File:** [TaskManagementSystem.postman_collection.json](./TaskManagementSystem.postman_collection.json)
+- **How to use:**
+  1. Open Postman and click "Import".
+  2. Select the `TaskManagementSystem.postman_collection.json` file from the project root.
+  3. Set the `baseUrl` variable to your backend URL (e.g., `http://localhost:5168`).
+  4. Use the provided requests to test all CRUD operations for tasks.
+
+See the collection file for details on each request and required parameters.
