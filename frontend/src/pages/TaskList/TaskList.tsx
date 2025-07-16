@@ -176,7 +176,7 @@ const TaskList: React.FC = () => {
   );
 
   return (
-    <div style={{ maxWidth: 1400, margin: '0 auto', width: '100%', position: 'relative' }}>
+    <div style={{ width: '100%', position: 'relative' }}>
       {blurredContent}
       {selectedTask && ReactDOM.createPortal(
         <TaskDetailModal
