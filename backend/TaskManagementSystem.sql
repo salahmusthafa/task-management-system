@@ -18,22 +18,23 @@ CREATE TABLE TaskCard (
 );
 GO
 
--- Insert sample tasks
+-- Insert sample tasks with randomly mixed due dates (past, present, future)
 INSERT INTO TaskCard (Title, Description, Status, DueDate) VALUES
-('Prepare project kickoff', 'Organize the initial project kickoff meeting with all stakeholders.', 'To Do', '2024-07-10T10:00:00'),
-('Design database schema', 'Draft and review the initial database schema for the MVP.', 'In Progress', '2024-07-05T17:00:00'),
-('Deploy prototype to staging', 'Deploy the first working prototype to the staging environment for internal review.', 'Done', '2024-06-28T15:00:00'),
-('Write user stories', 'Document user stories for all MVP features.', 'To Do', '2024-07-12T12:00:00'),
-('Implement authentication', 'Add authentication logic (optional for MVP, but planned).', 'In Progress', '2024-07-08T09:00:00'),
-('Fix UI bugs', 'Resolve reported UI bugs from the last sprint.', 'Done', '2024-06-30T18:00:00'),
-('Set up CI/CD pipeline', 'Configure continuous integration and deployment for the project.', 'To Do', '2024-07-15T11:00:00'),
-('Review codebase', 'Conduct a code review session with the development team.', 'In Progress', '2024-07-06T14:00:00'),
-('Update documentation', 'Update the README and API documentation for the latest changes.', 'Done', '2024-07-01T16:00:00'),
-('Plan sprint tasks', 'Break down the next sprint into actionable tasks.', 'To Do', '2024-07-13T10:30:00'),
-('Optimize database queries', 'Improve the performance of slow SQL queries.', 'In Progress', '2024-07-09T13:00:00'),
-('Conduct user testing', 'Organize a user testing session with pilot customers.', 'Done', '2024-07-02T15:30:00'),
-('Integrate email notifications', 'Add email notifications for task assignments and updates.', 'To Do', '2024-07-16T09:00:00'),
-('Refactor frontend components', 'Refactor React components for better reusability.', 'In Progress', '2024-07-07T12:00:00'),
-('Archive completed tasks', 'Move completed tasks to the archive for record-keeping.', 'Done', '2024-07-03T17:00:00'),
-('Schedule team retrospective', 'Set up a meeting to review the last sprint and discuss improvements.', 'To Do', '2024-07-14T11:30:00');
+('Implement authentication', 'Add authentication logic (optional for MVP, but planned).', 'In Progress', GETDATE()),
+('Integrate email notifications', 'Add email notifications for task assignments and updates.', 'To Do', DATEADD(day, 14, GETDATE())),
+('Prepare project kickoff', 'Organize the initial project kickoff meeting with all stakeholders.', 'To Do', DATEADD(day, -15, GETDATE())),
+('Plan sprint tasks', 'Break down the next sprint into actionable tasks.', 'To Do', DATEADD(day, 7, GETDATE())),
+('Design database schema', 'Draft and review the initial database schema for the MVP.', 'In Progress', DATEADD(day, -8, GETDATE())),
+('Fix UI bugs', 'Resolve reported UI bugs from the last sprint.', 'Done', DATEADD(day, 1, GETDATE())),
+('Archive completed tasks', 'Move completed tasks to the archive for record-keeping.', 'Done', DATEADD(day, 18, GETDATE())),
+('Write user stories', 'Document user stories for all MVP features.', 'To Do', DATEADD(day, -5, GETDATE())),
+('Refactor frontend components', 'Refactor React components for better reusability.', 'In Progress', DATEADD(day, 16, GETDATE())),
+('Review codebase', 'Conduct a code review session with the development team.', 'In Progress', DATEADD(day, 2, GETDATE())),
+('Set up CI/CD pipeline', 'Configure continuous integration and deployment for the project.', 'To Do', DATEADD(day, -3, GETDATE())),
+('Conduct user testing', 'Organize a user testing session with pilot customers.', 'Done', DATEADD(day, 10, GETDATE())),
+('Update documentation', 'Update the README and API documentation for the latest changes.', 'Done', DATEADD(day, 3, GETDATE())),
+('Schedule team retrospective', 'Set up a meeting to review the last sprint and discuss improvements.', 'To Do', DATEADD(day, 21, GETDATE())),
+('Deploy prototype to staging', 'Deploy the first working prototype to the staging environment for internal review.', 'Done', DATEADD(day, -1, GETDATE())),
+('Optimize database queries', 'Improve the performance of slow SQL queries.', 'In Progress', DATEADD(day, 8, GETDATE())),
+('Prepare quarterly review', 'Compile all project metrics and prepare presentation for quarterly review.', 'To Do', DATEADD(day, 30, GETDATE()));
 GO 
