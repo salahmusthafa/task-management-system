@@ -39,14 +39,18 @@ const useDynamicPageSize = () => {
     } else if (viewportWidth <= 768) {
       cardsPerRow = Math.max(1, Math.floor(availableWidth / (250 + cardGap))); // Tablet: smaller cards
     } else {
-      cardsPerRow = Math.max(1, cardsPerRow); // Desktop: use calculated value
+      // For larger screens, calculate based on actual grid behavior
+      cardsPerRow = Math.max(1, Math.floor(availableWidth / (cardMinWidth + cardGap)));
     }
     
     const rowsPerView = Math.max(1, Math.floor(availableHeight / (cardHeight + cardGap)));
     const calculatedPageSize = cardsPerRow * rowsPerView;
     
-    // Set reasonable limits (minimum 6, maximum 24)
-    const finalPageSize = Math.min(Math.max(calculatedPageSize, 6), 24);
+    // For very large screens, allow more cards but cap at a reasonable limit
+    const maxPageSize = viewportWidth >= 1920 ? 60 : viewportWidth >= 1440 ? 48 : 36;
+    
+    // Set the page size (minimum 6, dynamic maximum)
+    const finalPageSize = Math.min(Math.max(calculatedPageSize, 6), maxPageSize);
     
     setPageSize(finalPageSize);
   }, []);
@@ -203,40 +207,42 @@ const TaskList: React.FC = () => {
           />
         ))}
       </div>
-      {/* Pagination Controls */}
-      <div
-        className={styles.pagination}
-        style={{ filter: blurred ? 'blur(4px)' : 'none' }}
-        aria-label="Pagination navigation"
-      >
-        <button
-          onClick={() => setPage((p) => Math.max(1, p - 1))}
-          disabled={page === 1}
-          aria-label="Previous Page"
-          className={styles.paginationButton}
+      {/* Pagination Controls - Only show if there are more items than can fit */}
+      {total > pageSize && (
+        <div
+          className={styles.pagination}
+          style={{ filter: blurred ? 'blur(4px)' : 'none' }}
+          aria-label="Pagination navigation"
         >
-          Previous
-        </button>
-        {Array.from({ length: Math.ceil(total / pageSize) }, (_, i) => i + 1).map((pg) => (
           <button
-            key={pg}
-            onClick={() => setPage(pg)}
-            aria-current={pg === page ? 'page' : undefined}
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page === 1}
+            aria-label="Previous Page"
             className={styles.paginationButton}
-            disabled={pg === page}
           >
-            {pg}
+            Previous
           </button>
-        ))}
-        <button
-          onClick={() => setPage((p) => p + 1)}
-          disabled={page >= Math.ceil(total / pageSize)}
-          aria-label="Next Page"
-          className={styles.paginationButton}
-        >
-          Next
-        </button>
-      </div>
+          {Array.from({ length: Math.ceil(total / pageSize) }, (_, i) => i + 1).map((pg) => (
+            <button
+              key={pg}
+              onClick={() => setPage(pg)}
+              aria-current={pg === page ? 'page' : undefined}
+              className={styles.paginationButton}
+              disabled={pg === page}
+            >
+              {pg}
+            </button>
+          ))}
+          <button
+            onClick={() => setPage((p) => p + 1)}
+            disabled={page >= Math.ceil(total / pageSize)}
+            aria-label="Next Page"
+            className={styles.paginationButton}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </>
   );
 
