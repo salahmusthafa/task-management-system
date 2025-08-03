@@ -28,7 +28,7 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({ task, onClose, onEdit
       : task.status === 'In Progress'
       ? `${styles.statusBadge} ${styles.statusInProgress}`
       : `${styles.statusBadge} ${styles.statusDone}`;
-  const dueInfo = getRelativeDueDate(task.dueDate);
+  const dueInfo = task.status !== 'Done' ? getRelativeDueDate(task.dueDate) : null;
 
   useEffect(() => {
     lastActiveElement.current = document.activeElement as HTMLElement;
