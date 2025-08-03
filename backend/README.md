@@ -1,73 +1,49 @@
-# Backend (.NET API)
+# Task Management System Backend
 
-This is the backend API for the Task Management System, built with .NET 8, Dapper, and SQL Server.
+This is the backend API for the Task Management System built with ASP.NET Core, Dapper, and SQL Server.
 
-## Prerequisites
-- .NET 8 SDK
-- SQL Server (local or cloud)
+## Features
 
-## Setup Instructions
-1. Restore dependencies:
-   ```sh
-   dotnet restore
+- RESTful API for task management
+- SQL Server database with Dapper ORM
+- Comprehensive CRUD operations
+- Pagination and filtering support
+- Swagger/OpenAPI documentation
+
+## Setup
+
+### Prerequisites
+- .NET 8.0 SDK
+- SQL Server (LocalDB, Express, or Full)
+- Visual Studio 2022 or VS Code
+
+### Database Setup
+1. Run the SQL script to create the database:
+   ```sql
+   sqlcmd -S localhost -i TaskManagementSystem.sql
    ```
-2. Build the project:
-   ```sh
-   dotnet build
-   ```
-3. Update the connection string in `appsettings.json` as needed.
-4. Run the API:
-   ```sh
-   dotnet run
-   ```
-   The API will be available at `http://localhost:5168` (default).
 
-## Database Setup
-- Use the provided SQL script ([TaskManagementSystem.sql](./TaskManagementSystem.sql)) to create the database and `TaskCard` table.
-- Example connection string in `appsettings.json`:
-  ```json
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=TaskManagementSystem;User Id=sa;Password=your_password;TrustServerCertificate=True;"
-  }
-  ```
+### Sample Data
+The `TaskManagementSystem.sql` script includes 30 sample tasks that are automatically created when you run the database setup script.
+
+### Running the Application
+```bash
+dotnet run
+```
+
+The API will be available at `https://localhost:7001` (or the configured port).
 
 ## API Endpoints
 
-| Method | Endpoint                | Description                |
-|--------|-------------------------|----------------------------|
-| GET    | /api/tasks              | List all tasks (with filter/pagination) |
-| GET    | /api/tasks/{id}         | Get a specific task        |
-| POST   | /api/tasks              | Create a new task          |
-| PUT    | /api/tasks/{id}         | Update a task              |
-| DELETE | /api/tasks/{id}         | Delete a task              |
+- `GET /api/tasks` - Get all tasks with pagination and filtering
+- `GET /api/tasks/{id}` - Get a specific task
+- `POST /api/tasks` - Create a new task
+- `PUT /api/tasks/{id}` - Update an existing task
+- `DELETE /api/tasks/{id}` - Delete a task
 
-### Example Task Object
-```json
-{
-  "id": 1,
-  "title": "Sample Task",
-  "description": "Description here",
-  "status": "To Do",
-  "dueDate": "2024-12-31T23:59:59Z"
-}
-```
+## Testing
 
-### Status Codes
-- 200 OK: Success
-- 201 Created: Resource created
-- 400 Bad Request: Validation error
-- 404 Not Found: Task not found
-- 500 Internal Server Error: Server error
-
-## Running Tests
-```sh
+Run the tests with:
+```bash
 dotnet test
-```
-
-## Assumptions & Limitations
-- No authentication/authorization in MVP
-- Minimal validation and error handling
-- Date/times are in UTC (ISO 8601)
-
-## Contact
-For questions, contact your project lead or maintainer. 
+``` 

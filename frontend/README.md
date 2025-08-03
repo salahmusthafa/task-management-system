@@ -1,28 +1,55 @@
-# Frontend (React)
+# Task Management System Frontend
 
-This is the frontend for the Task Management System, built with React, TypeScript, and Vite.
+This is the frontend application for the Task Management System built with React, TypeScript, and Vite.
 
-## Prerequisites
-- Node.js (v18+ recommended)
-- npm (v9+ recommended)
+## Features
 
-## Setup Instructions
-1. Install dependencies:
-   ```sh
-   npm install
-   ```
-2. Run the app in development mode:
-   ```sh
-   npm run dev
-   ```
-   The app will be available at `http://localhost:5173` (default).
-3. To build for production:
-   ```sh
-   npm run build
-   ```
+### Dynamic Pagination
+The task list now features dynamic pagination that automatically adjusts the number of cards displayed based on the browser window size:
 
-## Running Tests
-```sh
+- **Responsive Design**: The page size automatically calculates how many task cards can fit in the current viewport
+- **Real-time Updates**: When you resize the browser window, the page size updates automatically with a 150ms debounce
+- **Responsive Breakpoints**: 
+  - Mobile (≤480px): Single column layout
+  - Tablet (≤768px): Smaller cards with multiple columns
+  - Desktop (>768px): Full responsive grid
+- **Smart Limits**: Page size is constrained between 6 and 24 cards for optimal performance
+- **Visual Indicator**: Shows the current number of cards per page in the header
+
+### How it Works
+The system calculates the available space by:
+1. Measuring the viewport dimensions
+2. Accounting for header, pagination, and padding space
+3. Calculating how many cards can fit in the available area
+4. Applying responsive breakpoints for different screen sizes
+5. Setting reasonable minimum and maximum limits
+
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Run tests
+npm test
+
+# Build for production
+npm run build
+```
+
+## Testing
+
+The application includes comprehensive tests for:
+- Task card components
+- API services
+- Utility functions
+- Dynamic pagination functionality
+
+Run tests with:
+```bash
 npm test
 ```
 

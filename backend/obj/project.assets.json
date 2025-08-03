@@ -2175,11 +2175,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/salahmusthafa/Downloads/Task Management System/task-management-system/backend/backend.csproj",
+      "projectUniqueName": "/Users/salahmusthafa/Downloads/Task Management System/Task Management System/backend/backend.csproj",
       "projectName": "backend",
-      "projectPath": "/Users/salahmusthafa/Downloads/Task Management System/task-management-system/backend/backend.csproj",
+      "projectPath": "/Users/salahmusthafa/Downloads/Task Management System/Task Management System/backend/backend.csproj",
       "packagesPath": "/Users/salahmusthafa/.nuget/packages/",
-      "outputPath": "/Users/salahmusthafa/Downloads/Task Management System/task-management-system/backend/obj/",
+      "outputPath": "/Users/salahmusthafa/Downloads/Task Management System/Task Management System/backend/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/salahmusthafa/.nuget/NuGet/NuGet.Config"

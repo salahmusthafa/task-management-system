@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getTasks, deleteTask as apiDeleteTask } from '../../services/taskApi';
 import type { Task, TaskStatus } from '../../types/task';
@@ -9,6 +9,68 @@ import ReactDOM from 'react-dom';
 import styles from './TaskList.module.css';
 
 const statusOptions: TaskStatus[] = ['To Do', 'In Progress', 'Done'];
+
+// Custom hook to calculate dynamic page size based on viewport
+const useDynamicPageSize = () => {
+  const [pageSize, setPageSize] = useState(12);
+
+  const calculatePageSize = useCallback(() => {
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    // Card dimensions and spacing (based on CSS)
+    const cardMinWidth = 280; // minmax(280px, 1fr) from CSS
+    const cardHeight = 180; // min-height from TaskCard CSS
+    const cardGap = 20; // gap from grid CSS
+    const headerHeight = 120; // approximate header height including margins
+    const paginationHeight = 80; // approximate pagination height including padding
+    const pagePadding = 40; // approximate page padding
+    
+    // Calculate available space
+    const availableHeight = Math.max(0, viewportHeight - headerHeight - paginationHeight - pagePadding);
+    const availableWidth = Math.max(0, viewportWidth - pagePadding);
+    
+    // Calculate how many cards can fit
+    let cardsPerRow = Math.floor(availableWidth / (cardMinWidth + cardGap));
+    
+    // Handle responsive breakpoints from CSS
+    if (viewportWidth <= 480) {
+      cardsPerRow = 1; // Mobile: single column
+    } else if (viewportWidth <= 768) {
+      cardsPerRow = Math.max(1, Math.floor(availableWidth / (250 + cardGap))); // Tablet: smaller cards
+    } else {
+      cardsPerRow = Math.max(1, cardsPerRow); // Desktop: use calculated value
+    }
+    
+    const rowsPerView = Math.max(1, Math.floor(availableHeight / (cardHeight + cardGap)));
+    const calculatedPageSize = cardsPerRow * rowsPerView;
+    
+    // Set reasonable limits (minimum 6, maximum 24)
+    const finalPageSize = Math.min(Math.max(calculatedPageSize, 6), 24);
+    
+    setPageSize(finalPageSize);
+  }, []);
+
+  useEffect(() => {
+    calculatePageSize();
+    
+    let resizeTimeout: number;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        calculatePageSize();
+      }, 150); // Debounce resize events
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(resizeTimeout);
+    };
+  }, [calculatePageSize]);
+
+  return pageSize;
+};
 
 const DeleteTaskModal: React.FC<{ task: Task; onClose: () => void; onDeleted: () => void }> = ({ task, onClose, onDeleted }) => {
   const modalRef = React.useRef<HTMLDivElement>(null);
@@ -73,7 +135,7 @@ const TaskList: React.FC = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [deletingTask, setDeletingTask] = useState<Task | null>(null);
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(12);
+  const pageSize = useDynamicPageSize(); // Use dynamic page size instead of static
   const [total, setTotal] = useState(0);
   const navigate = useNavigate();
 
@@ -96,10 +158,10 @@ const TaskList: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, pageSize, statusFilter]);
 
-  // Reset to page 1 when filter changes
+  // Reset to page 1 when filter changes or page size changes
   useEffect(() => {
     setPage(1);
-  }, [statusFilter]);
+  }, [statusFilter, pageSize]);
 
   const blurred = selectedTask || editingTask || showCreateModal || deletingTask;
   const blurredContent = (
@@ -118,6 +180,9 @@ const TaskList: React.FC = () => {
               <option key={status} value={status}>{status}</option>
             ))}
           </select>
+          <span style={{ marginLeft: 16, fontSize: '14px', color: '#666' }}>
+            Showing {pageSize} cards per page
+          </span>
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
